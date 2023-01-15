@@ -1,6 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { MinDate } from 'class-validator';
+import { ApiProperty, ApiTags } from '@nestjs/swagger';
+import { IsDate, MinDate } from 'class-validator';
 
+@ApiTags('ScheduledSeats')
 class CreateScheduledSeatDto {
   @ApiProperty({
     description: 'The seat ID, must have this property or seatNumber property',
@@ -26,6 +27,7 @@ class CreateScheduledSeatDto {
   })
   employeeEmail: string;
 
+  @IsDate()
   @MinDate(new Date())
   @ApiProperty({
     description: 'The start date of the scheduled seat',
@@ -33,6 +35,7 @@ class CreateScheduledSeatDto {
   })
   startDate: Date;
 
+  @IsDate()
   @MinDate(new Date())
   @ApiProperty({
     description: 'The end date of the scheduled seat',

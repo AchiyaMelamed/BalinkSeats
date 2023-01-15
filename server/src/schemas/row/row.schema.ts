@@ -10,7 +10,7 @@ export class Row {
   area: Area;
   @Prop({ required: true, unique: true })
   number: string;
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   description: string;
   @Prop({ required: true })
   sumSeats: number;

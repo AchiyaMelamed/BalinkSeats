@@ -34,6 +34,13 @@ export class ScheduledSeatService {
       }),
     );
 
+    if (seat.ERROR) {
+      return seat;
+    }
+    if (employee.ERROR) {
+      return employee;
+    }
+
     const newScheduledSeat = new this.scheduledSeatModel({
       seat,
       employee,

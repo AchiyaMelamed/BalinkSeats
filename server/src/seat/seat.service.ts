@@ -25,7 +25,7 @@ export class SeatService {
       const res = id
         ? await this.findSeatById(id)
         : number
-        ? await this.seatModel.find({ number }).exec()
+        ? await this.seatModel.findOne({ number }).exec()
         : description
         ? await this.seatModel.find({ description }).exec()
         : sitting

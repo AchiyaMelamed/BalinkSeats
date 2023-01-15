@@ -33,16 +33,16 @@ export class EmployeeService {
       const res = id
         ? await this.findEmployeeById(id)
         : email
-        ? await this.employeeModel.find({ email }).exec()
+        ? await this.employeeModel.findOne({ email }).exec()
         : firstName && lastName
-        ? await this.employeeModel.find({ firstName, lastName }).exec()
+        ? await this.employeeModel.findOne({ firstName, lastName }).exec()
         : firstName
         ? await this.employeeModel.find({ firstName }).exec()
         : lastName
         ? await this.employeeModel.find({ lastName }).exec()
         : await this.findAllEmployees();
       if (!res) {
-        throw new Error('Employee not found');
+        return { ERROR: 'Employee not found' };
       }
       return res;
     } catch (error) {

@@ -9,7 +9,9 @@ import {
 } from '@nestjs/common';
 import { OfficeService } from './office.service';
 import { CreateOfficeDto } from '../dto/office/create-office.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Office')
 @Controller('office')
 export class OfficeController {
   constructor(private readonly officeService: OfficeService) {}

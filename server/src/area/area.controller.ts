@@ -1,7 +1,9 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { AreaService } from './area.service';
 import { CreateAreaDto } from '../dto/area/create-area.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Area')
 @Controller('area')
 export class AreaController {
   constructor(private readonly areaService: AreaService) {}

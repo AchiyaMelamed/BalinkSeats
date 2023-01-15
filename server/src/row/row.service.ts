@@ -31,14 +31,12 @@ export class RowService {
     return await this.rowModel.find();
   }
 
-  async findRow({ id, number, description, area, areaNumber }) {
+  async findRow({ id, number, area, areaNumber }) {
     try {
       const res = id
         ? await this.findRowById(id)
         : number
         ? await this.rowModel.find({ number })
-        : description
-        ? await this.rowModel.find({ description })
         : area || areaNumber
         ? await this.findByArea({ areaId: area, areaNumber })
         : await this.findAllRows();
