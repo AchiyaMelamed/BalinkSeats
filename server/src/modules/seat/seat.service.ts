@@ -3,10 +3,10 @@ import { Injectable, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { CreateSeatDto } from 'src/dto';
-import { Row, RowDocument, Seat, SeatDocument } from '../schemas';
+import { Row, RowDocument, Seat, SeatDocument } from 'src/schemas';
 import handleGetById from 'utils/errorHandling/handleGetById';
 import { generateNumber } from 'utils/generateNumbers/generateNumbers';
-import { RowService } from 'src/row/row.service';
+import { RowService } from 'src/modules/row/row.service';
 
 @Injectable()
 export class SeatService {

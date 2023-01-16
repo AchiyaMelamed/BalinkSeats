@@ -4,9 +4,9 @@ import { SeatController } from './seat.controller';
 import { SeatService } from './seat.service';
 
 import { MongooseModule } from '@nestjs/mongoose';
-import { Seat, SeatSchema } from '../schemas/seat/seat.schema';
+import { Seat, SeatSchema } from 'src/schemas';
 import { Row, RowSchema } from 'src/schemas';
-import { RowModule } from 'src/row/row.module';
+import { RowModule } from 'src/modules/row/row.module';
 
 @Module({
   imports: [

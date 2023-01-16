@@ -9,7 +9,7 @@ import { CreateAreaDto } from './area/create-area.dto';
 
 import { CreateOfficeDto } from './office/create-office.dto';
 
-import CreateScheduledSeatDto from './scheduledSeat/create-scheduled-seat.dto';
+import CreateScheduledSeatDto from './scheduled-seat/create-scheduled-seat.dto';
 
 export {
   CreateEmployeeDto,

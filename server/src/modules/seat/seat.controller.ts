@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { SeatService } from './seat.service';
-import { CreateSeatDto } from '../dto';
+import { CreateSeatDto } from 'src/dto';
 import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Seat')

@@ -5,9 +5,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   ScheduledSeat,
   ScheduledSeatSchema,
-} from 'src/schemas/scheduledSeat/scheduledSeat.schema';
-import { SeatModule } from 'src/seat/seat.module';
-import { EmployeeModule } from 'src/employee/employee.module';
+} from 'src/schemas/scheduled-seat/scheduled-seat.schema';
+import { SeatModule } from 'src/modules/seat/seat.module';
+import { EmployeeModule } from 'src/modules/employee/employee.module';
 
 @Module({
   imports: [

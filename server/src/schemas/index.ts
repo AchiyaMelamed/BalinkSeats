@@ -7,6 +7,11 @@ import { Seat, SeatDocument, SeatSchema } from './seat/seat.schema';
 import { Row, RowDocument, RowSchema } from './row/row.schema';
 import { Area, AreaDocument, AreaSchema } from './area/area.schema';
 import { Office, OfficeDocument, OfficeSchema } from './office/office.schema';
+import {
+  ScheduledSeat,
+  ScheduledSeatDocument,
+  ScheduledSeatSchema,
+} from './scheduled-seat/scheduled-seat.schema';
 
 export {
   Employee,
@@ -24,4 +29,7 @@ export {
   Office,
   OfficeDocument,
   OfficeSchema,
+  ScheduledSeat,
+  ScheduledSeatDocument,
+  ScheduledSeatSchema,
 };

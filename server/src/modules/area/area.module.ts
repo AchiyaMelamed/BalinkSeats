@@ -4,7 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AreaService } from './area.service';
 import { AreaController } from './area.controller';
 import { Area, AreaSchema, Office, OfficeSchema } from 'src/schemas';
-import { OfficeModule } from 'src/office/office.module';
+import { OfficeModule } from 'src/modules/office/office.module';
 
 @Module({
   imports: [

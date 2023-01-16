@@ -1,12 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { OfficeService } from 'src/office/office.service';
+import { OfficeService } from 'src/modules/office/office.service';
 
 import { Area, AreaDocument, Office, OfficeDocument } from 'src/schemas';
 import handleGetById from 'utils/errorHandling/handleGetById';
 import { generateNumber } from 'utils/generateNumbers/generateNumbers';
-import { CreateAreaDto } from '../dto/area/create-area.dto';
+import { CreateAreaDto } from 'src/dto';
 
 @Injectable()
 export class AreaService {

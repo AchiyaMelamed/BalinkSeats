@@ -1,13 +1,13 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ScheduledSeatDocument } from 'src/schemas/scheduledSeat/scheduledSeat.schema';
+import { ScheduledSeatDocument } from 'src/schemas';
 
 import { CreateScheduledSeatDto } from 'src/dto';
 
-import { ScheduledSeat } from 'src/schemas/scheduledSeat/scheduledSeat.schema';
-import { SeatService } from 'src/seat/seat.service';
-import { EmployeeService } from 'src/employee/employee.service';
+import { ScheduledSeat } from 'src/schemas';
+import { SeatService } from 'src/modules/seat/seat.service';
+import { EmployeeService } from 'src/modules/employee/employee.service';
 import handleGetById from 'utils/errorHandling/handleGetById';
 
 @Injectable()
@@ -20,6 +20,14 @@ export class ScheduledSeatService {
   ) {}
 
   async createScheduled(createScheduledSeatDto: CreateScheduledSeatDto) {
+    const startDate = new Date(createScheduledSeatDto.startDate);
+    const endDate = new Date(createScheduledSeatDto.endDate);
+    if (endDate < startDate) {
+      return {
+        ERROR: 'End date cannot be before start date',
+      };
+    }
+
     const seat = await this.seatService.findSeat(
       Object.assign({
         id: createScheduledSeatDto.seat,
