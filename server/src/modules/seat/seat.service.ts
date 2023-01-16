@@ -4,9 +4,10 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { CreateSeatDto } from 'src/dto';
 import { Row, RowDocument, Seat, SeatDocument } from 'src/schemas';
-import handleGetById from 'utils/errorHandling/handleGetById';
+import handleInvalidValueError from 'utils/errorHandling/handleGetById';
 import { generateNumber } from 'utils/generateNumbers/generateNumbers';
 import { RowService } from 'src/modules/row/row.service';
+import { decreaseChildByOne } from 'utils/DBUpdates/deceaseChildSum';
 
 @Injectable()
 export class SeatService {
@@ -38,7 +39,7 @@ export class SeatService {
       }
       return res;
     } catch (error) {
-      return await handleGetById(error);
+      return await handleInvalidValueError(error);
     }
   }
 
@@ -56,7 +57,7 @@ export class SeatService {
     try {
       return this.seatModel.findById(id).exec();
     } catch (error) {
-      return await handleGetById(error);
+      return await handleInvalidValueError(error);
     }
   }
 
@@ -80,6 +81,35 @@ export class SeatService {
     } catch (error) {
       console.log(createdSeat);
       throw new Error(error);
+    }
+  }
+
+  async deleteSeatById(id: string) {
+    try {
+      const seat = await this.seatModel.findByIdAndDelete(id).exec();
+      if (!seat) {
+        return { message: 'Seat not found' };
+      }
+      const row = await this.rowModel.findById(seat.row).exec();
+
+      await decreaseChildByOne(row, 'sumSeats');
+
+      return seat;
+    } catch (error) {
+      return await handleInvalidValueError(error);
+    }
+  }
+
+  async deleteSeat({ number }) {
+    try {
+      const seat = await this.seatModel.findOneAndDelete({ number }).exec();
+      const row = await this.rowModel.findById(seat.row).exec();
+
+      await decreaseChildByOne(row, 'sumSeats');
+
+      return seat;
+    } catch (error) {
+      return await handleInvalidValueError(error);
     }
   }
 }

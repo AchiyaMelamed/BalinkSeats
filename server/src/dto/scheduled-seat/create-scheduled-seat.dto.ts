@@ -1,5 +1,5 @@
 import { ApiProperty, ApiTags } from '@nestjs/swagger';
-import { IsDate, MinDate } from 'class-validator';
+import { IsDate, IsEmail, MinDate } from 'class-validator';
 
 @ApiTags('ScheduledSeats')
 class CreateScheduledSeatDto {
@@ -21,6 +21,7 @@ class CreateScheduledSeatDto {
   })
   employee: string;
 
+  @IsEmail()
   @ApiProperty({
     description:
       'The employee email, Must have this property or employee property',

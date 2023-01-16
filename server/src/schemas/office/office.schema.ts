@@ -7,7 +7,7 @@ export type OfficeDocument = HydratedDocument<Office>;
 export class Office {
   @Prop({ required: true, unique: true })
   number: string;
-  @Prop({ required: false })
+  @Prop({ required: true })
   description: string;
   @Prop({ required: true })
   sumAreas: number;

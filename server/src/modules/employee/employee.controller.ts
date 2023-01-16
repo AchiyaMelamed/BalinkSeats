@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Body,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { CreateEmployeeDto } from 'src/dto';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
@@ -36,5 +44,15 @@ export class EmployeeController {
   @ApiCreatedResponse({ description: 'Create a new employee' })
   createEmployee(@Body() createEmployeeDto: CreateEmployeeDto) {
     return this.employeeService.createEmployee(createEmployeeDto);
+  }
+
+  @Delete(':id')
+  deleteEmployeeById(@Param('id') id: string) {
+    return this.employeeService.deleteEmployeeById(id);
+  }
+
+  @Delete()
+  deleteEmployee(@Body('email') email: string) {
+    return this.employeeService.deleteEmployee({ email });
   }
 }

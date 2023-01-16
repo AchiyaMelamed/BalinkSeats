@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { AreaService } from './area.service';
@@ -35,5 +35,15 @@ export class AreaController {
   @Post()
   async createArea(@Body() createAreaDto: CreateAreaDto) {
     return await this.areaService.createArea(createAreaDto);
+  }
+
+  @Delete(':id')
+  async deleteAreaById(@Param('id') id: string) {
+    return await this.areaService.deleteAreaById(id);
+  }
+
+  @Delete()
+  async deleteArea(@Body('number') number: string) {
+    return await this.areaService.deleteArea({ number });
   }
 }

@@ -4,8 +4,9 @@ import { Model } from 'mongoose';
 import { OfficeService } from 'src/modules/office/office.service';
 
 import { Area, AreaDocument, Office, OfficeDocument } from 'src/schemas';
-import handleGetById from 'utils/errorHandling/handleGetById';
+import handleInvalidValueError from 'utils/errorHandling/handleGetById';
 import { generateNumber } from 'utils/generateNumbers/generateNumbers';
+import { decreaseChildByOne } from 'utils/DBUpdates/deceaseChildSum';
 import { CreateAreaDto } from 'src/dto';
 
 @Injectable()
@@ -24,7 +25,7 @@ export class AreaService {
       }
       return res;
     } catch (error) {
-      return await handleGetById(error);
+      return await handleInvalidValueError(error);
     }
   }
 
@@ -43,7 +44,7 @@ export class AreaService {
         : await this.findAllAreas();
       return res;
     } catch (error) {
-      return await handleGetById(error);
+      return await handleInvalidValueError(error);
     }
   }
 
@@ -79,6 +80,38 @@ export class AreaService {
       return res;
     } catch (error) {
       return { ERROR: error.message };
+    }
+  }
+
+  async deleteAreaById(id: string) {
+    try {
+      const area = await this.areaModel.findByIdAndDelete(id).exec();
+      if (!area) {
+        return { message: 'Area not found' };
+      }
+      const office = await this.officeModel.findById(area.office).exec();
+
+      await decreaseChildByOne(office, 'sumAreas');
+
+      return area;
+    } catch (error) {
+      return await handleInvalidValueError(error);
+    }
+  }
+
+  async deleteArea({ number }) {
+    try {
+      const area = await this.areaModel.findOneAndDelete({ number }).exec();
+      if (!area) {
+        return { message: 'Area not found' };
+      }
+      const office = await this.officeModel.findById(area.office).exec();
+
+      await decreaseChildByOne(office, 'sumAreas');
+
+      return area;
+    } catch (error) {
+      return await handleInvalidValueError(error);
     }
   }
 }

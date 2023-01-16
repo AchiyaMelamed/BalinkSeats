@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Param } from '@nestjs/common';
 import { OfficeService } from './office.service';
 import { CreateOfficeDto } from 'src/dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -32,5 +24,15 @@ export class OfficeController {
   @Post()
   createOffice(@Body() createOfficeDto: CreateOfficeDto) {
     return this.officeService.createOffice(createOfficeDto);
+  }
+
+  @Delete(':id')
+  deleteOfficeById(@Param('id') id: string) {
+    return this.officeService.deleteOfficeById(id);
+  }
+
+  @Delete()
+  deleteOffice(@Body('number') number: number) {
+    return this.officeService.deleteOffice({ number });
   }
 }

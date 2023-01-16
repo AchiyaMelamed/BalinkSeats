@@ -3,9 +3,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AreaService } from 'src/modules/area/area.service';
 import { Area, AreaDocument, Row, RowDocument } from 'src/schemas';
-import handleGetById from 'utils/errorHandling/handleGetById';
+import handleInvalidValueError from 'utils/errorHandling/handleGetById';
 import { generateNumber } from 'utils/generateNumbers/generateNumbers';
 import { CreateRowDto } from 'src/dto';
+import { decreaseChildByOne } from 'utils/DBUpdates/deceaseChildSum';
 
 @Injectable()
 export class RowService {
@@ -23,7 +24,7 @@ export class RowService {
       }
       return res;
     } catch (error) {
-      return await handleGetById(error);
+      return await handleInvalidValueError(error);
     }
   }
 
@@ -45,7 +46,7 @@ export class RowService {
       }
       return res;
     } catch (error) {
-      return await handleGetById(error);
+      return await handleInvalidValueError(error);
     }
   }
 
@@ -81,6 +82,38 @@ export class RowService {
       return res;
     } catch (error) {
       throw new Error(error);
+    }
+  }
+
+  async deleteRowById(id: string) {
+    try {
+      const row = await this.rowModel.findByIdAndDelete(id).exec();
+      if (!row) {
+        return { message: 'Row not found' };
+      }
+      const area = await this.areaModel.findById(row.area).exec();
+
+      await decreaseChildByOne(area, 'sumRows');
+
+      return row;
+    } catch (error) {
+      return await handleInvalidValueError(error);
+    }
+  }
+
+  async deleteRow({ number }) {
+    try {
+      const row = await this.rowModel.findOneAndDelete({ number }).exec();
+      if (!row) {
+        return { message: 'Row not found' };
+      }
+      const area = await this.areaModel.findById(row.area).exec();
+
+      await decreaseChildByOne(area, 'sumRows');
+
+      return row;
+    } catch (error) {
+      return await handleInvalidValueError(error);
     }
   }
 }

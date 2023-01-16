@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateOfficeDto } from 'src/dto';
 import { Office, OfficeDocument } from 'src/schemas';
-import handleGetById from 'utils/errorHandling/handleGetById';
+import handleInvalidValueError from 'utils/errorHandling/handleGetById';
 
 import { numberToString } from 'utils/generateNumbers/generateNumbers';
 
@@ -14,10 +14,10 @@ export class OfficeService {
   ) {}
 
   async createOffice(createOfficeDto: CreateOfficeDto) {
-    const { number } = createOfficeDto;
+    const officesCount = await this.officeModel.countDocuments();
     const office = {
       ...createOfficeDto,
-      number: numberToString(number),
+      number: numberToString(officesCount + 1),
       sumAreas: 0,
     };
     return new this.officeModel(office).save();
@@ -37,7 +37,7 @@ export class OfficeService {
       }
       return res;
     } catch (error) {
-      return await handleGetById(error);
+      return await handleInvalidValueError(error);
     }
   }
 
@@ -49,7 +49,31 @@ export class OfficeService {
       }
       return res;
     } catch (error) {
-      return await handleGetById(error);
+      return await handleInvalidValueError(error);
+    }
+  }
+
+  async deleteOfficeById(id: string) {
+    try {
+      const office = await this.officeModel.findByIdAndDelete(id);
+      if (!office) {
+        throw new Error('Office not found');
+      }
+      return office;
+    } catch (error) {
+      return await handleInvalidValueError(error);
+    }
+  }
+
+  async deleteOffice({ number }) {
+    try {
+      const office = await this.officeModel.findOneAndDelete({ number });
+      if (!office) {
+        throw new Error('Office not found');
+      }
+      return office;
+    } catch (error) {
+      return await handleInvalidValueError(error);
     }
   }
 }

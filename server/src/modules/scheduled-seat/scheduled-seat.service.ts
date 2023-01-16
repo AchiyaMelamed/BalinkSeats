@@ -8,7 +8,7 @@ import { CreateScheduledSeatDto } from 'src/dto';
 import { ScheduledSeat } from 'src/schemas';
 import { SeatService } from 'src/modules/seat/seat.service';
 import { EmployeeService } from 'src/modules/employee/employee.service';
-import handleGetById from 'utils/errorHandling/handleGetById';
+import handleInvalidValueError from 'utils/errorHandling/handleGetById';
 
 @Injectable()
 export class ScheduledSeatService {
@@ -70,7 +70,7 @@ export class ScheduledSeatService {
       }
       return res;
     } catch (error) {
-      return await handleGetById(error);
+      return await handleInvalidValueError(error);
     }
   }
 
@@ -148,7 +148,19 @@ export class ScheduledSeatService {
         : await this.findAllScheduled();
       return res;
     } catch (error) {
-      return await handleGetById(error);
+      return await handleInvalidValueError(error);
+    }
+  }
+
+  async deleteScheduledById(id: string) {
+    try {
+      const scheduled = await this.scheduledSeatModel.findByIdAndDelete(id);
+      if (!scheduled) {
+        throw new Error('ScheduledSeat not found');
+      }
+      return scheduled;
+    } catch (error) {
+      return await handleInvalidValueError(error);
     }
   }
 }

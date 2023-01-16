@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Delete, Param } from '@nestjs/common';
 import { SeatService } from './seat.service';
 import { CreateSeatDto } from 'src/dto';
 import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -39,5 +39,15 @@ export class SeatController {
   @ApiCreatedResponse({ description: 'Create a new seat' })
   createSeat(@Body() createSeatDto: CreateSeatDto): object {
     return this.seatService.createSeat(createSeatDto);
+  }
+
+  @Delete(':id')
+  deleteSeatById(@Param('id') id: string): object {
+    return this.seatService.deleteSeatById(id);
+  }
+
+  @Delete()
+  deleteSeat(@Body('number') number: number): object {
+    return this.seatService.deleteSeat({ number });
   }
 }

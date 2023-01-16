@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { Employee, EmployeeDocument } from 'src/schemas';
 import { CreateEmployeeDto, UpdateEmployeeDto } from 'src/dto';
-import handleGetById from 'utils/errorHandling/handleGetById';
+import handleInvalidValueError from 'utils/errorHandling/handleGetById';
 
 @Injectable()
 export class EmployeeService {
@@ -24,7 +24,7 @@ export class EmployeeService {
       }
       return res;
     } catch (error) {
-      return await handleGetById(error);
+      return await handleInvalidValueError(error);
     }
   }
 
@@ -46,7 +46,7 @@ export class EmployeeService {
       }
       return res;
     } catch (error) {
-      return await handleGetById(error);
+      return await handleInvalidValueError(error);
     }
   }
 
@@ -56,6 +56,32 @@ export class EmployeeService {
       return await newEmployee.save();
     } catch (error) {
       return { ERROR: error?.message };
+    }
+  }
+
+  async deleteEmployeeById(id: string) {
+    try {
+      const employee = await this.employeeModel.findByIdAndDelete(id).exec();
+      if (!employee) {
+        throw new Error('Employee not found');
+      }
+      return employee;
+    } catch (error) {
+      return await handleInvalidValueError(error);
+    }
+  }
+
+  async deleteEmployee({ email }) {
+    try {
+      const employee = await this.employeeModel
+        .findOneAndDelete({ email })
+        .exec();
+      if (!employee) {
+        throw new Error('Employee not found');
+      }
+      return employee;
+    } catch (error) {
+      return await handleInvalidValueError(error);
     }
   }
 }

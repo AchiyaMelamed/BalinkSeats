@@ -55,4 +55,9 @@ export class ScheduledSeatController {
       createScheduledSeatDto,
     );
   }
+
+  @Delete(':id')
+  async deleteScheduledById(@Param('id') id: string) {
+    return this.scheduledSeatService.deleteScheduledById(id);
+  }
 }

@@ -43,4 +43,14 @@ export class RowController {
   createRow(@Body() createRowDto: CreateRowDto) {
     return this.rowService.createRow(createRowDto);
   }
+
+  @Delete(':id')
+  deleteRowById(@Param('id') id: string) {
+    return this.rowService.deleteRowById(id);
+  }
+
+  @Delete()
+  deleteRow(@Body('number') number: number) {
+    return this.rowService.deleteRow({ number });
+  }
 }
