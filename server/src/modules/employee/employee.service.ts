@@ -9,7 +9,8 @@ import handleInvalidValueError from 'utils/errorHandling/handleGetById';
 @Injectable()
 export class EmployeeService {
   constructor(
-    @InjectModel(Employee.name) private employeeModel: Model<EmployeeDocument>,
+    @InjectModel(Employee.name)
+    private readonly employeeModel: Model<EmployeeDocument>,
   ) {}
 
   async findAllEmployees() {

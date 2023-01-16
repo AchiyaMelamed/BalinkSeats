@@ -14,9 +14,9 @@ import handleInvalidValueError from 'utils/errorHandling/handleGetById';
 export class ScheduledSeatService {
   constructor(
     @InjectModel(ScheduledSeat.name)
-    private scheduledSeatModel: Model<ScheduledSeatDocument>,
-    @Inject(SeatService) private seatService: SeatService,
-    @Inject(EmployeeService) private employeeService: EmployeeService,
+    private readonly scheduledSeatModel: Model<ScheduledSeatDocument>,
+    @Inject(SeatService) private readonly seatService: SeatService,
+    @Inject(EmployeeService) private readonly employeeService: EmployeeService,
   ) {}
 
   async createScheduled(createScheduledSeatDto: CreateScheduledSeatDto) {

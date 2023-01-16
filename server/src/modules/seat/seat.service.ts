@@ -12,9 +12,9 @@ import { decreaseChildByOne } from 'utils/DBUpdates/deceaseChildSum';
 @Injectable()
 export class SeatService {
   constructor(
-    @InjectModel(Seat.name) private seatModel: Model<SeatDocument>,
-    @InjectModel(Row.name) private rowModel: Model<RowDocument>,
-    @Inject(RowService) private rowService: RowService,
+    @InjectModel(Seat.name) private readonly seatModel: Model<SeatDocument>,
+    @InjectModel(Row.name) private readonly rowModel: Model<RowDocument>,
+    @Inject(RowService) private readonly rowService: RowService,
   ) {}
 
   async findAllSeats() {

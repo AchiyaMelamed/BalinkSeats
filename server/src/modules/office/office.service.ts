@@ -10,7 +10,8 @@ import { numberToString } from 'utils/generateNumbers/generateNumbers';
 @Injectable()
 export class OfficeService {
   constructor(
-    @InjectModel(Office.name) private officeModel: Model<OfficeDocument>,
+    @InjectModel(Office.name)
+    private readonly officeModel: Model<OfficeDocument>,
   ) {}
 
   async createOffice(createOfficeDto: CreateOfficeDto) {

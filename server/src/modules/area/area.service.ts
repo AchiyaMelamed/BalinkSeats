@@ -12,9 +12,10 @@ import { CreateAreaDto } from 'src/dto';
 @Injectable()
 export class AreaService {
   constructor(
-    @InjectModel(Area.name) private areaModel: Model<AreaDocument>,
-    @InjectModel(Office.name) private officeModel: Model<OfficeDocument>,
-    @Inject(OfficeService) private officeService: OfficeService,
+    @InjectModel(Area.name) private readonly areaModel: Model<AreaDocument>,
+    @InjectModel(Office.name)
+    private readonly officeModel: Model<OfficeDocument>,
+    @Inject(OfficeService) private readonly officeService: OfficeService,
   ) {}
 
   async findAreaById(id: string): Promise<any> {

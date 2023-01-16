@@ -9,11 +9,21 @@ async function bootstrap() {
     .setTitle('BalinkSeats API')
     .setDescription('API for the Balink company seats reservation system')
     .setVersion('1.0')
-    .addTag('BalinkSeats')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, {
+    customSiteTitle: 'Swagger - BalinkSeats API',
+    swaggerOptions: {
+      operationsSorter: (a, b) => {
+        const methodsOrder = ['get', 'post', 'put', 'delete'];
+        return (
+          methodsOrder.indexOf(a.get('method')) -
+          methodsOrder.indexOf(b.get('method'))
+        );
+      },
+    },
+  });
 
   await app.listen(3000);
 }
