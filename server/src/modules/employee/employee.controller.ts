@@ -23,10 +23,10 @@ export class EmployeeController {
 
   @Get()
   getEmployee(
-    @Body('email') email: string,
-    @Body('firstName') firstName: string,
-    @Body('lastName') lastName: string,
-    @Body('id') id: string,
+    @Query('email') email: string,
+    @Query('firstName') firstName: string,
+    @Query('lastName') lastName: string,
+    @Query('id') id: string,
   ) {
     if (!email && !firstName && !lastName && !id) {
       return this.employeeService.findAllEmployees();

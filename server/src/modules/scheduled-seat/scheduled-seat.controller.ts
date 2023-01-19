@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Query,
   Param,
   Delete,
 } from '@nestjs/common';
@@ -23,15 +23,15 @@ export class ScheduledSeatController {
 
   @Get()
   async getScheduled(
-    @Body('id') id: string,
-    @Body('seat') seat: string,
-    @Body('seatNumber') seatNumber: string,
-    @Body('employee') employee: string,
-    @Body('employeeEmail') employeeEmail: string,
-    @Body('employeeFirstName') employeeFirstName: string,
-    @Body('employeeLastName') employeeLastName: string,
-    @Body('startDate') startDate: Date,
-    @Body('endDate') endDate: Date,
+    @Query('id') id: string,
+    @Query('seat') seat: string,
+    @Query('seatNumber') seatNumber: string,
+    @Query('employee') employee: string,
+    @Query('employeeEmail') employeeEmail: string,
+    @Query('employeeFirstName') employeeFirstName: string,
+    @Query('employeeLastName') employeeLastName: string,
+    @Query('startDate') startDate: Date,
+    @Query('endDate') endDate: Date,
   ) {
     return await this.scheduledSeatService.findScheduled({
       id,

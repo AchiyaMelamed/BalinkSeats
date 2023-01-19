@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Query,
   Param,
   Delete,
 } from '@nestjs/common';
@@ -23,10 +23,10 @@ export class RowController {
 
   @Get()
   getRow(
-    @Body('id') id: string,
-    @Body('number') number: number,
-    @Body('area') area: string,
-    @Body('areaNumber') areaNumber: string,
+    @Query('id') id: string,
+    @Query('number') number: number,
+    @Query('area') area: string,
+    @Query('areaNumber') areaNumber: string,
   ) {
     if (!id && !number && !area && !areaNumber) {
       return this.rowService.findAllRows();

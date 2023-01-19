@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Delete, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Delete,
+  Query,
+  Param,
+} from '@nestjs/common';
 import { OfficeService } from './office.service';
 import { CreateOfficeDto } from 'src/dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -14,7 +22,7 @@ export class OfficeController {
   }
 
   @Get()
-  getOffice(@Body('id') id: string, @Body('number') number: number) {
+  getOffice(@Query('id') id: string, @Query('number') number: number) {
     if (!id && !number) {
       return this.officeService.findAllOffices();
     }

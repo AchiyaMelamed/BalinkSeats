@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Delete, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Query,
+  Param,
+} from '@nestjs/common';
 import { SeatService } from './seat.service';
 import { CreateSeatDto } from 'src/dto';
 import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -10,12 +18,12 @@ export class SeatController {
 
   @Get()
   getSeat(
-    @Body('id') id: string,
-    @Body('number') number: number,
-    @Body('description') description: string,
-    @Body('sitting') sitting: string,
-    @Body('row') row: string,
-    @Body('rowNumber') rowNumber: string,
+    @Query('id') id: string,
+    @Query('number') number: number,
+    @Query('description') description: string,
+    @Query('sitting') sitting: string,
+    @Query('row') row: string,
+    @Query('rowNumber') rowNumber: string,
   ): object {
     if (!id && !number && !description && !sitting && !row && !rowNumber) {
       return this.seatService.findAllSeats();

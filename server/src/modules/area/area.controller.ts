@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Delete, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Body,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { AreaService } from './area.service';
@@ -16,10 +24,10 @@ export class AreaController {
 
   @Get()
   async getArea(
-    @Body('office') office: string,
-    @Body('id') id: string,
-    @Body('number') number: string,
-    @Body('officeNumber') officeNumber: string,
+    @Query('office') office: string,
+    @Query('id') id: string,
+    @Query('number') number: string,
+    @Query('officeNumber') officeNumber: string,
   ) {
     if (!office && !id && !number && !officeNumber) {
       return await this.areaService.findAllAreas();
