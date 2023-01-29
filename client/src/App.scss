@@ -1,0 +1,14 @@
+$primary-color: #1c0c5b;
+$secondary-color: #3d2c8d;
+$background-color: #212121;
+$text-color: #e6e6e6;
+
+body {
+  background-color: $background-color;
+}
+
+body,
+body * {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif !important;
+  color: $text-color !important;
+}
