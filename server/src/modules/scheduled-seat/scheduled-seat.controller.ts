@@ -6,13 +6,16 @@ import {
   Query,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ScheduledSeatService } from './scheduled-seat.service';
 import { CreateScheduledSeatDto } from 'src/dto';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { JwtGuard } from '../auth/guards/jwt.guard';
 
 @ApiTags('ScheduledSeat')
 @Controller('scheduled')
+@UseGuards(JwtGuard)
 export class ScheduledSeatController {
   constructor(private readonly scheduledSeatService: ScheduledSeatService) {}
 

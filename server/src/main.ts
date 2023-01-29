@@ -12,7 +12,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document, {
+  SwaggerModule.setup('swagger', app, document, {
     customSiteTitle: 'Swagger - BalinkSeats API',
     swaggerOptions: {
       operationsSorter: (a, b) => {
@@ -24,6 +24,9 @@ async function bootstrap() {
       },
     },
   });
+
+  app.enableCors();
+  app.setGlobalPrefix('api');
 
   await app.listen(3000);
 }

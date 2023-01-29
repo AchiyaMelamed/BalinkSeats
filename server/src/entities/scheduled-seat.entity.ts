@@ -1,7 +1,10 @@
+import { EmployeeEntity } from './employee.entity';
+import { SeatEntity } from './seat.entity';
+
 export class ScheduledSeatEntity {
   id: string;
-  seatId: string;
-  employeeId: string;
+  seat: SeatEntity;
+  employee: EmployeeEntity;
   startDate: Date;
   endDate: Date;
 }

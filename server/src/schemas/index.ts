@@ -12,6 +12,7 @@ import {
   ScheduledSeatDocument,
   ScheduledSeatSchema,
 } from './scheduled-seat/scheduled-seat.schema';
+import { User, UserDocument, UserSchema } from './user/user.schema';
 
 export {
   Employee,
@@ -32,4 +33,7 @@ export {
   ScheduledSeat,
   ScheduledSeatDocument,
   ScheduledSeatSchema,
+  User,
+  UserDocument,
+  UserSchema,
 };

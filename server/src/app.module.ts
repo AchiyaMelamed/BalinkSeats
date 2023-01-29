@@ -7,6 +7,8 @@ import { ScheduledSeatModule } from './modules/scheduled-seat/scheduled-seat.mod
 import { OfficeModule } from './modules/office/office.module';
 import { AreaModule } from './modules/area/area.module';
 import { RowModule } from './modules/row/row.module';
+import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { RowModule } from './modules/row/row.module';
     OfficeModule,
     AreaModule,
     RowModule,
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

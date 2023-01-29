@@ -29,7 +29,12 @@ export class EmployeeService {
     }
   }
 
-  async findEmployee({ id, firstName, lastName, email }): Promise<any> {
+  async findEmployee({
+    id = null,
+    firstName = null,
+    lastName = null,
+    email = null,
+  }): Promise<any> {
     try {
       const res = id
         ? await this.findEmployeeById(id)

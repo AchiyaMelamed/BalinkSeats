@@ -1,9 +1,12 @@
+import { EmployeeEntity } from './employee.entity';
+import { RowEntity } from './row.entity';
+
 export class SeatEntity {
   constructor(
     public id: string,
-    public officeNumber: number,
-    public areaNumber: number,
-    public rowNumber: number,
-    public seatNumber: number,
+    public row: RowEntity,
+    public number: string,
+    public description: string,
+    public sitting: EmployeeEntity | null,
   ) {}
 }
