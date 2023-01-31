@@ -1,6 +1,8 @@
-import { Typography } from "@mui/material";
-import { FC, FormEvent, useState } from "react";
+import { FC, FormEvent, useMemo, useState } from "react";
+import FormWrapper from "../../../components/BoxGridForm/BoxGridForm.component";
 import FormComponent from "../../../components/Form";
+import LinkComponent from "../../../components/Link/Link.component";
+import ModalComponent from "../../../components/Modal/Modal.component";
 import SmallLabelComponent from "../../../components/SmallLabel/SmallLabel.component";
 import {
   clearRegisterDetails,
@@ -11,12 +13,13 @@ import {
   setRegisterPassword2,
 } from "../../../store/features/authSlice";
 import { useAppDispatch, useAppSelector } from "../../../store/features/store";
-import { useRegisterMutation } from "../../api/authApiSlice";
+import { useRegisterMutation } from "../../api/apiAuthSlice";
 import { NewUser } from "../models/NewUser";
 
 const RegistrationFormComponent: FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [register, results] = useRegisterMutation();
+  const [showModal, setShowModal] = useState(false);
   const dispatch = useAppDispatch();
   const emailValue = useAppSelector((state) => state.auth.register.email);
   const firstNameValue = useAppSelector(
@@ -81,25 +84,29 @@ const RegistrationFormComponent: FC = () => {
   ];
   const titleLabel = "Register to BalinkSeats";
 
-  const submitButtonLabel = "Register";
+  const submitButtonLabel = "Sign In";
+
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (e.currentTarget.password1.value !== e.currentTarget.password2.value) {
-      alert("Passwords do not match");
-      return;
+    if (password1Value === password2Value) {
+      const newUser: NewUser = {
+        email: emailValue,
+        firstName:
+          firstNameValue.charAt(0).toUpperCase() + firstNameValue.slice(1),
+        lastName:
+          lastNameValue.charAt(0).toUpperCase() + lastNameValue.slice(1),
+        password: password1Value,
+      };
+      register(newUser).then((res: any) => {
+        if (res.data && !res.data.ERROR) {
+          setShowModal(true);
+          dispatch(clearRegisterDetails());
+        }
+      });
     }
-    const newUser: NewUser = {
-      email: emailValue,
-      firstName: firstNameValue,
-      lastName: lastNameValue,
-      password: password1Value,
-    };
-    register(newUser);
-
-    dispatch(clearRegisterDetails());
   };
 
-  const errorComponent = (
+  const formErrorComponent = (
     <SmallLabelComponent
       linkLabel={!showPassword ? "Show Passwords" : "Hide Passwords"}
       link="#"
@@ -113,22 +120,77 @@ const RegistrationFormComponent: FC = () => {
     </SmallLabelComponent>
   );
 
+  const apiErrorLabel: { label: string; link?: string; linkLabel?: string } =
+    useMemo(
+      () =>
+        results?.data?.ERROR
+          ? results.data.ERROR === "Employee not found"
+            ? {
+                label: `Email does not exists. Please contact your HR`,
+              }
+            : results.data.ERROR === "Email already in use"
+            ? {
+                label: "This email already has an account",
+                link: "/signin",
+                linkLabel: "SignIn",
+              }
+            : results.data.ERROR ===
+              "First or/and last name do not match the employee record for this email"
+            ? {
+                label:
+                  "First or/and last name do not match the employee record for this email",
+              }
+            : { label: "Something went wrong, Please try again" }
+          : results.status === "rejected"
+          ? { label: "Something went wrong, Please try again" }
+          : { label: "" },
+      [results.data, results.status]
+    );
+
+  const apiErrorComponent = (
+    <SmallLabelComponent
+      divStyle={{ margin: 0, alignSelf: "center" }}
+      labelStyle={{ color: "red !important" }}
+      linkLabel={apiErrorLabel?.linkLabel}
+      link={apiErrorLabel?.link}
+    >
+      {apiErrorLabel?.label}
+    </SmallLabelComponent>
+  );
+
   const linkLabel = "Signin";
   const link = "/signin";
 
+  const onClose = () => {
+    setShowModal(false);
+  };
+
   return (
-    <FormComponent
-      fields={fields}
-      titleLabel={titleLabel}
-      submitButtonLabel={submitButtonLabel}
-      onSubmitHandler={onSubmitHandler}
-      showError={password1Value !== password2Value}
-      errorComponent={errorComponent}
-    >
-      <SmallLabelComponent linkLabel={linkLabel} link={link} isDivider={true}>
-        Already have an Account?
-      </SmallLabelComponent>
-    </FormComponent>
+    <div>
+      <FormWrapper titleLabel={titleLabel}>
+        {apiErrorLabel && apiErrorComponent}
+        <FormComponent
+          fields={fields}
+          submitButtonLabel={submitButtonLabel}
+          onSubmitHandler={onSubmitHandler}
+          showError={password1Value !== password2Value}
+          errorComponent={formErrorComponent}
+          requestStatus={results.status}
+        ></FormComponent>
+        <SmallLabelComponent linkLabel={linkLabel} link={link} isDivider={true}>
+          Already have an Account?
+        </SmallLabelComponent>
+      </FormWrapper>
+
+      <ModalComponent
+        open={showModal}
+        onClose={onClose}
+        closeIcon="close"
+        title="Registration Success"
+      >
+        <LinkComponent to="/signin">Sign In</LinkComponent>
+      </ModalComponent>
+    </div>
   );
 };
 

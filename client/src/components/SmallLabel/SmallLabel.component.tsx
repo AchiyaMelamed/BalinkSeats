@@ -1,7 +1,9 @@
-import { Divider, Link, Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
+import LinkComponent from "../Link/Link.component";
 
 const SmallLabelComponent = ({
   labelStyle,
+  divStyle,
   linkLabel,
   link,
   onClickLink,
@@ -22,28 +24,38 @@ const SmallLabelComponent = ({
       }}
     >
       {children}{" "}
-      <Link
-        href={link}
-        onClick={onClickLink}
-        sx={{ color: "#a57ce1 !important", ...linkStyle }}
-      >
-        {linkLabel}
-      </Link>
+      {link && linkLabel && (
+        <LinkComponent to={link} onClick={onClickLink}>
+          {linkLabel}
+        </LinkComponent>
+      )}
     </Typography>
   );
-  return isDivider ? (
-    <Divider
-      sx={{
-        "&::before, &::after": {
-          borderColor: "#e6e6e6",
-          ...dividerStyle,
-        },
+
+  return (
+    <div
+      style={{
+        marginTop: "1rem",
+        display: "flex",
+        textAlign: "center",
+        ...divStyle,
       }}
     >
-      {label}
-    </Divider>
-  ) : (
-    label
+      {isDivider ? (
+        <Divider
+          sx={{
+            "&::before, &::after": {
+              borderColor: "#e6e6e6",
+              ...dividerStyle,
+            },
+          }}
+        >
+          {label}
+        </Divider>
+      ) : (
+        label
+      )}
+    </div>
   );
 };
 

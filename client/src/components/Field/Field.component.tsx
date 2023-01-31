@@ -2,12 +2,12 @@ import "./Field.scss";
 
 import { InputLabel, TextField } from "@mui/material";
 import { useEffect } from "react";
-import { useAppSelector } from "../../store/features/store";
 
 const FieldComponent = ({
   name,
   type,
   label,
+  inputColor,
   placeHolder,
   value,
   onChange,
@@ -40,6 +40,7 @@ const FieldComponent = ({
         variant="standard"
         size="small"
         sx={{
+          input: { color: inputColor || "#9073c0 !important" },
           width: "100%",
           "& .MuiInput-underline:before": {
             borderBottomColor: "#e6e6e6",

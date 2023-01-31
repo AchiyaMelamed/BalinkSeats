@@ -1,4 +1,5 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
+import FormWrapper from "../../../components/BoxGridForm/BoxGridForm.component";
 import FormComponent from "../../../components/Form";
 import SmallLabelComponent from "../../../components/SmallLabel/SmallLabel.component";
 import {
@@ -7,9 +8,12 @@ import {
   setSigninPassword,
 } from "../../../store/features/authSlice";
 import { useAppDispatch, useAppSelector } from "../../../store/features/store";
+import { useSigninMutation } from "../../api/apiAuthSlice";
+import { UserSignin } from "../models/UserSignin";
 
 const SigninFormComponent: FC = () => {
   const dispatch = useAppDispatch();
+  const [signin, results] = useSigninMutation();
   const emailValue = useAppSelector((state) => state.auth.signin.email);
   const passwordValue = useAppSelector((state) => state.auth.signin.password);
 
@@ -34,11 +38,47 @@ const SigninFormComponent: FC = () => {
   ];
   const titleLabel = "SignIn to BalinkSeats";
 
-  const submitButtonLabel = "SignIn";
+  const submitButtonLabel = "Sign In";
   const onSubmitHandler = (e: any) => {
     e.preventDefault();
-    dispatch(clearSigninDetails());
+    const userSignin: UserSignin = {
+      email: emailValue,
+      password: passwordValue,
+    };
+    signin(userSignin).then((res: any) => {
+      if (res.data && !res.data.ERROR) {
+        dispatch(clearSigninDetails());
+        window.location.href = "/";
+      }
+    });
   };
+
+  const apiErrorLabel: { label: string; link?: string; linkLabel?: string } =
+    useMemo(
+      () =>
+        results?.data?.ERROR
+          ? {
+              label: `Email or Password is incorrect`,
+
+              link: "/register",
+              linkLabel: "Register",
+            }
+          : results.status === "rejected"
+          ? { label: "Something went wrong, Please try again" }
+          : { label: "" },
+      [results.data, results.status]
+    );
+
+  const apiErrorComponent = (
+    <SmallLabelComponent
+      divStyle={{ margin: 0, alignSelf: "center" }}
+      labelStyle={{ color: "red !important" }}
+      linkLabel={apiErrorLabel?.linkLabel}
+      link={apiErrorLabel?.link}
+    >
+      {apiErrorLabel?.label}
+    </SmallLabelComponent>
+  );
 
   const registerLinkLabel = "Register";
   const registerLink = "/register";
@@ -46,12 +86,21 @@ const SigninFormComponent: FC = () => {
   // const forgotPasswordLink = "/forgot-password";
 
   return (
-    <FormComponent
-      fields={fields}
-      titleLabel={titleLabel}
-      submitButtonLabel={submitButtonLabel}
-      onSubmitHandler={onSubmitHandler}
-    >
+    <FormWrapper titleLabel={titleLabel}>
+      {apiErrorLabel && apiErrorComponent}
+      <FormComponent
+        fields={fields}
+        titleLabel={titleLabel}
+        submitButtonLabel={submitButtonLabel}
+        onSubmitHandler={onSubmitHandler}
+        requestStatus={results.status}
+      ></FormComponent>
+      {/* <SmallLabelComponent
+        linkLabel={forgotPasswordLinkLabel}
+        link={forgotPasswordLink}
+      >
+        Forgot Password?
+      </SmallLabelComponent> */}
       <SmallLabelComponent
         linkLabel={registerLinkLabel}
         link={registerLink}
@@ -59,13 +108,7 @@ const SigninFormComponent: FC = () => {
       >
         Don't have an Account?
       </SmallLabelComponent>
-      {/* <SmallLabelComponent
-        linkLabel={forgotPasswordLinkLabel}
-        link={forgotPasswordLink}
-      >
-        Forgot Password?
-      </SmallLabelComponent> */}
-    </FormComponent>
+    </FormWrapper>
   );
 };
 

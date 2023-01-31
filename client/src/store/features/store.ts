@@ -1,16 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { authApiSlice } from "../../features/api/authApiSlice";
+import { apiAuthSlice } from "../../features/api/apiAuthSlice";
 import authReducer from "./authSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    [authApiSlice.reducerPath]: authApiSlice.reducer,
+    [apiAuthSlice.reducerPath]: apiAuthSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApiSlice.middleware),
+    getDefaultMiddleware().concat(apiAuthSlice.middleware),
 });
 
 setupListeners(store.dispatch);

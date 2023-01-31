@@ -1,7 +1,5 @@
-import AuthLayout from "../features/auth/components/AuthLayout";
-
 function HomePage() {
-  return <AuthLayout>HomePage</AuthLayout>;
+  return <div>HomePage</div>;
 }
 
 export default HomePage;
