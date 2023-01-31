@@ -33,7 +33,7 @@ export class UserService {
 
   async findUserById(id: string): Promise<UserDetails | any> {
     const user = await this.userModel.findById(id).exec();
-    if (!user) return { ERROR: 'User not found.' };
+    if (!user) return { ERROR: 'User not found' };
     return this._getUserDetails(user);
   }
 

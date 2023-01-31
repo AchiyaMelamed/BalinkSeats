@@ -29,11 +29,22 @@ export class AuthService {
       email,
     });
     if (!employee || employee.ERROR)
-      return employee?.ERROR || { ERROR: 'No employee found with that email.' };
+      return (
+        { ERROR: employee?.ERROR } || {
+          ERROR: 'No employee found with that email',
+        }
+      );
 
     const existingUser = await this.userService.findUserByEmployee(employee);
+    if (existingUser) return { ERROR: 'Email already in use' };
 
-    if (existingUser) return { ERROR: 'Email already in use.' };
+    const firstName = employee.firstName;
+    const lastName = employee.lastName;
+    if (firstName !== user.firstName || lastName !== user.lastName)
+      return {
+        ERROR:
+          'First or/and last name do not match the employee record for this email',
+      };
 
     const hashedPassword = await this.hashPassword(password);
     const newUser = await this.userService.createUser(employee, hashedPassword);
@@ -55,13 +66,13 @@ export class AuthService {
       email,
     });
     if (!employee || employee.ERROR)
-      return employee?.ERROR || { ERROR: 'User not found.' };
+      return { ERROR: employee?.ERROR } || { ERROR: 'User not found' };
 
     const user = await this.userService.findUserByEmployee(employee);
-    if (!user) return { ERROR: 'User not found.' };
+    if (!user) return { ERROR: 'User not found' };
 
     const isValid = await this.validatePassword(password, user.password);
-    if (!isValid) return { ERROR: 'Invalid password.' };
+    if (!isValid) return { ERROR: 'Invalid password' };
 
     return this.userService._getUserDetails(user);
   }
@@ -72,7 +83,7 @@ export class AuthService {
     const { email, password } = existingUser;
     const user = await this.validateUser(email, password);
 
-    if (user.ERROR) return { ERROR: user.ERROR };
+    if (user?.ERROR) return { ERROR: user.ERROR };
 
     const jwt = await this.jwtService.signAsync({ user });
     return { token: jwt };
