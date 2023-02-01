@@ -43,7 +43,7 @@ export class SeatService {
     }
   }
 
-  async findByRow({ rowId, rowNumber }) {
+  async findByRow({ rowId, rowNumber }: any) {
     const row = await this.rowService.findRow(
       Object.assign({ id: rowId, number: rowNumber }),
     );

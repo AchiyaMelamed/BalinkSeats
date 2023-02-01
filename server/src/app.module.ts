@@ -18,6 +18,7 @@ import { AuthModule } from './modules/auth/auth.module';
     OfficeModule,
     AreaModule,
     RowModule,
+    SeatModule,
     UserModule,
     AuthModule,
   ],

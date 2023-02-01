@@ -49,7 +49,7 @@ export class AreaService {
     }
   }
 
-  async findByOffice({ officeId, officeNumber }) {
+  async findByOffice({ officeId, officeNumber }: any) {
     const office = await this.officeService.findOffice(
       Object.assign({
         id: officeId,

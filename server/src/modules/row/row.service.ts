@@ -50,7 +50,7 @@ export class RowService {
     }
   }
 
-  async findByArea({ areaId, areaNumber }) {
+  async findByArea({ areaId, areaNumber }: any) {
     const area = await this.areaService.findArea(
       Object.assign({
         id: areaId,
