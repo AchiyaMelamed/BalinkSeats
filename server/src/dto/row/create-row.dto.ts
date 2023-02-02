@@ -6,4 +6,10 @@ export class CreateRowDto {
 
   @ApiProperty()
   description: string;
+
+  @ApiProperty()
+  position: [number, number];
+
+  @ApiProperty()
+  orientation: string;
 }

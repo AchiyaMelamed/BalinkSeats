@@ -8,7 +8,7 @@ import { OfficeModule } from '../office/office.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/seats'),
+    MongooseModule.forRoot('mongodb://127.0.0.1:27017/test'),
     MongooseModule.forFeature([
       { name: Area.name, schema: AreaSchema },
       { name: Office.name, schema: OfficeSchema },

@@ -55,7 +55,7 @@ export class SeatService {
 
   async findSeatById(id: string) {
     try {
-      return this.seatModel.findById(id).exec();
+      return await this.seatModel.findById(id).exec();
     } catch (error) {
       return await handleInvalidValueError(error);
     }

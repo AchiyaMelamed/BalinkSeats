@@ -14,6 +14,14 @@ export class Row {
   description: string;
   @Prop({ required: true })
   sumSeats: number;
+  @Prop({ required: true, unique: true })
+  position: [number, number];
+  @Prop({
+    require: true,
+    default: 'vertical',
+    options: ['vertical', 'horizontal'],
+  })
+  orientation: string;
 }
 
 export const RowSchema = SchemaFactory.createForClass(Row);

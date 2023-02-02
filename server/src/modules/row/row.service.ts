@@ -73,6 +73,8 @@ export class RowService {
       area,
       number: rowNumber,
       description: createRowDto.description,
+      position: createRowDto.position,
+      orientation: createRowDto.orientation,
       sumSeats: 0,
     });
     try {
