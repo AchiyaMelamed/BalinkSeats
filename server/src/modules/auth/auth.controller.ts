@@ -2,9 +2,9 @@ import { Controller, Post, Body } from '@nestjs/common';
 import { HttpCode } from '@nestjs/common/decorators';
 import { HttpStatus } from '@nestjs/common/enums';
 import { ApiTags } from '@nestjs/swagger';
-import { LoginUserDto } from 'src/dto/auth/login-user.dto';
+import { LoginUserDto } from '../../dto';
 
-import { RegisterUserDto } from 'src/dto/auth/register-user.dto';
+import { RegisterUserDto } from '../../dto';
 import { UserDetails } from '../user/user.interface';
 import { AuthService } from './auth.service';
 

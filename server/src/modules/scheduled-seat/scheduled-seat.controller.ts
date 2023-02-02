@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ScheduledSeatService } from './scheduled-seat.service';
-import { CreateScheduledSeatDto } from 'src/dto';
+import { CreateScheduledSeatDto } from '../../dto';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 

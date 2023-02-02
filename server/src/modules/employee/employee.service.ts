@@ -2,9 +2,9 @@ import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { Employee, EmployeeDocument } from 'src/schemas';
-import { CreateEmployeeDto, UpdateEmployeeDto } from 'src/dto';
-import handleInvalidValueError from 'utils/errorHandling/handleGetById';
+import { Employee, EmployeeDocument } from '../../schemas';
+import { CreateEmployeeDto, UpdateEmployeeDto } from '../../dto';
+import handleInvalidValueError from '../../../utils/errorHandling/handleGetById';
 
 @Injectable()
 export class EmployeeService {

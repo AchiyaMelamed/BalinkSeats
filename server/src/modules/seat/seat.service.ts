@@ -2,12 +2,12 @@ import { Model } from 'mongoose';
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { CreateSeatDto } from 'src/dto';
-import { Row, RowDocument, Seat, SeatDocument } from 'src/schemas';
-import handleInvalidValueError from 'utils/errorHandling/handleGetById';
-import { generateNumber } from 'utils/generateNumbers/generateNumbers';
-import { RowService } from 'src/modules/row/row.service';
-import { decreaseChildByOne } from 'utils/DBUpdates/deceaseChildSum';
+import { CreateSeatDto } from '../../dto';
+import { Row, RowDocument, Seat, SeatDocument } from '../../schemas';
+import handleInvalidValueError from '../../../utils/errorHandling/handleGetById';
+import { generateNumber } from '../../../utils/generateNumbers/generateNumbers';
+import { RowService } from '../row/row.service';
+import { decreaseChildByOne } from '../../../utils/DBUpdates/deceaseChildSum';
 
 @Injectable()
 export class SeatService {

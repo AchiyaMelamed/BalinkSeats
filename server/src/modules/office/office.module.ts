@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { OfficeService } from './office.service';
 import { OfficeController } from './office.controller';
-import { Office, OfficeSchema } from 'src/schemas';
+import { Office, OfficeSchema } from '../../schemas';
 
 @Module({
   imports: [

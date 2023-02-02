@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateOfficeDto } from 'src/dto';
-import { Office, OfficeDocument } from 'src/schemas';
-import handleInvalidValueError from 'utils/errorHandling/handleGetById';
+import { CreateOfficeDto } from '../../dto';
+import { Office, OfficeDocument } from '../../schemas';
+import handleInvalidValueError from '../../../utils/errorHandling/handleGetById';
 
-import { numberToString } from 'utils/generateNumbers/generateNumbers';
+import { numberToString } from '../../../utils/generateNumbers/generateNumbers';
 
 @Injectable()
 export class OfficeService {

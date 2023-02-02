@@ -1,12 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AreaService } from 'src/modules/area/area.service';
-import { Area, AreaDocument, Row, RowDocument } from 'src/schemas';
-import handleInvalidValueError from 'utils/errorHandling/handleGetById';
-import { generateNumber } from 'utils/generateNumbers/generateNumbers';
-import { CreateRowDto } from 'src/dto';
-import { decreaseChildByOne } from 'utils/DBUpdates/deceaseChildSum';
+import { AreaService } from '../area/area.service';
+import { Area, AreaDocument, Row, RowDocument } from '../../schemas';
+import handleInvalidValueError from '../../../utils/errorHandling/handleGetById';
+import { generateNumber } from '../../../utils/generateNumbers/generateNumbers';
+import { CreateRowDto } from '../../dto';
+import { decreaseChildByOne } from '../../../utils/DBUpdates/deceaseChildSum';
 
 @Injectable()
 export class RowService {

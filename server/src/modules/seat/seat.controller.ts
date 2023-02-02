@@ -8,7 +8,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { SeatService } from './seat.service';
-import { CreateSeatDto } from 'src/dto';
+import { CreateSeatDto } from '../../dto';
 import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Seat')

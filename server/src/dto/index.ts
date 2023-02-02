@@ -11,6 +11,9 @@ import { CreateOfficeDto } from './office/create-office.dto';
 
 import CreateScheduledSeatDto from './scheduled-seat/create-scheduled-seat.dto';
 
+import { LoginUserDto } from './auth/login-user.dto';
+import { RegisterUserDto } from './auth/register-user.dto';
+
 export {
   CreateEmployeeDto,
   UpdateEmployeeDto,
@@ -19,4 +22,6 @@ export {
   CreateAreaDto,
   CreateOfficeDto,
   CreateScheduledSeatDto,
+  LoginUserDto,
+  RegisterUserDto,
 };

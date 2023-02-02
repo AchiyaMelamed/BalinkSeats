@@ -8,7 +8,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { OfficeService } from './office.service';
-import { CreateOfficeDto } from 'src/dto';
+import { CreateOfficeDto } from '../../dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Office')

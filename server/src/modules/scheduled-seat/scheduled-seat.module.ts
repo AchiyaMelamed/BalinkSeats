@@ -2,12 +2,9 @@ import { Module } from '@nestjs/common';
 import { ScheduledSeatService } from './scheduled-seat.service';
 import { ScheduledSeatController } from './scheduled-seat.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import {
-  ScheduledSeat,
-  ScheduledSeatSchema,
-} from 'src/schemas/scheduled-seat/scheduled-seat.schema';
-import { SeatModule } from 'src/modules/seat/seat.module';
-import { EmployeeModule } from 'src/modules/employee/employee.module';
+import { ScheduledSeat, ScheduledSeatSchema } from '../../schemas';
+import { SeatModule } from '../seat/seat.module';
+import { EmployeeModule } from '../employee/employee.module';
 
 @Module({
   imports: [

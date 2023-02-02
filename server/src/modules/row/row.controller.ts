@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { RowService } from './row.service';
-import { CreateRowDto } from 'src/dto';
+import { CreateRowDto } from '../../dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Row')

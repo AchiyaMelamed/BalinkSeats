@@ -3,8 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { RowService } from './row.service';
 import { RowController } from './row.controller';
-import { Area, AreaSchema, Row, RowSchema } from 'src/schemas';
-import { AreaModule } from 'src/modules/area/area.module';
+import { Area, AreaSchema, Row, RowSchema } from '../../schemas';
+import { AreaModule } from '../area/area.module';
 
 @Module({
   imports: [

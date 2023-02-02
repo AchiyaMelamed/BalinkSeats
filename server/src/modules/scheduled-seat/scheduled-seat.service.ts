@@ -1,14 +1,14 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ScheduledSeatDocument } from 'src/schemas';
+import { ScheduledSeatDocument } from '../../schemas';
 
-import { CreateScheduledSeatDto } from 'src/dto';
+import { CreateScheduledSeatDto } from '../../dto';
 
-import { ScheduledSeat } from 'src/schemas';
-import { SeatService } from 'src/modules/seat/seat.service';
-import { EmployeeService } from 'src/modules/employee/employee.service';
-import handleInvalidValueError from 'utils/errorHandling/handleGetById';
+import { ScheduledSeat } from '../../schemas';
+import { SeatService } from '../seat/seat.service';
+import { EmployeeService } from '../employee/employee.service';
+import handleInvalidValueError from '../../../utils/errorHandling/handleGetById';
 
 @Injectable()
 export class ScheduledSeatService {

@@ -6,6 +6,6 @@ export class AreaEntity {
     public office: OfficeEntity,
     public number: string,
     public description: string,
-    public sumRows: number,
+    public sum,
   ) {}
 }

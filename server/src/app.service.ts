@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { OfficeService } from 'src/modules/office/office.service';
+import { OfficeService } from './modules/office/office.service';
 import { AreaService } from './modules/area/area.service';
 import { RowService } from './modules/row/row.service';
 import { SeatService } from './modules/seat/seat.service';

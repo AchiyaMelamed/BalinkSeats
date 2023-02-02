@@ -10,7 +10,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 
 import { AreaService } from './area.service';
-import { CreateAreaDto } from 'src/dto';
+import { CreateAreaDto } from '../../dto';
 
 @ApiTags('Area')
 @Controller('area')

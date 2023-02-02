@@ -1,13 +1,13 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { OfficeService } from 'src/modules/office/office.service';
+import { OfficeService } from '../office/office.service';
 
-import { Area, AreaDocument, Office, OfficeDocument } from 'src/schemas';
-import handleInvalidValueError from 'utils/errorHandling/handleGetById';
-import { generateNumber } from 'utils/generateNumbers/generateNumbers';
-import { decreaseChildByOne } from 'utils/DBUpdates/deceaseChildSum';
-import { CreateAreaDto } from 'src/dto';
+import { Area, AreaDocument, Office, OfficeDocument } from '../../schemas';
+import handleInvalidValueError from '../../../utils/errorHandling/handleGetById';
+import { generateNumber } from '../../../utils/generateNumbers/generateNumbers';
+import { decreaseChildByOne } from '../../../utils/DBUpdates/deceaseChildSum';
+import { CreateAreaDto } from '../../dto';
 
 @Injectable()
 export class AreaService {

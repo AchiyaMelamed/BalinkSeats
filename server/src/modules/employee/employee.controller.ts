@@ -8,7 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
-import { CreateEmployeeDto } from 'src/dto';
+import { CreateEmployeeDto } from '../../dto';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Employee')
