@@ -4,18 +4,25 @@ import { useMemo } from "react";
 
 import FormWrapper from "../../../components/BoxGridForm/BoxGridForm.component";
 import AreaComponent from "./Area.component";
-import { height } from "@mui/system";
+import maxXY from "../../../utils/dataAnalayze/maxXY";
 
 const OfficeComponent = ({ officeData }: any) => {
+  const [maxX] = maxXY(officeData.areas, "area");
   const renderedAreas = useMemo(
     () => (
-      <div className="areas-wrapper">
+      <div
+        className="areas-wrapper"
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${maxX + 1}, ${100 / (maxX + 1)}%)`,
+        }}
+      >
         {officeData.areas?.map((areaData: any) => {
           return <AreaComponent areaData={areaData} key={areaData.area._id} />;
         })}
       </div>
     ),
-    [officeData]
+    [officeData, maxX]
   );
   return (
     <FormWrapper

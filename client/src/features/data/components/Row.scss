@@ -1,5 +1,19 @@
 .seats-wrapper {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+}
+
+.column-seats {
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 1.1rem;
+  color: #af7ab3 !important;
+  font-weight: 500;
 }

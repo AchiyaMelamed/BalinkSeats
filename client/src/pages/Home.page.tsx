@@ -4,9 +4,11 @@ import { useMemo } from "react";
 import { useGetDataQuery } from "../features/api/apiDataSlice";
 import OfficeComponent from "../features/data/components/Office.component";
 import Tabs, { Tab } from "../components/Tabs/Tabs.component";
+import LoadingComponent from "../components/Loading/Loading.component";
+import SmallLabelComponent from "../components/SmallLabel/SmallLabel.component";
 
 function HomePage() {
-  const { isLoading, data, error, isFetching, isError } =
+  const { isLoading, isFetching, data, error, isError } =
     useGetDataQuery("data");
 
   const renderedOffices = useMemo(
@@ -21,18 +23,40 @@ function HomePage() {
     [data]
   );
 
-  return (
-    <div className="main">
-      <Tabs>
-        {renderedOffices?.map((office: any, index: number) => {
-          return (
-            <Tab label={data[index].office.description} key={index}>
-              {office}
-            </Tab>
-          );
-        })}
-      </Tabs>
+  const errorComponent = useMemo(() => {
+    return (
+      <SmallLabelComponent
+        labelStyle={{
+          color: "red !important",
+          fontWeight: "600",
+          fontSize: "1.5rem",
+        }}
+      >
+        ERROR while loading data, please try again
+      </SmallLabelComponent>
+    );
+  }, [error]);
+
+  return isLoading ? (
+    <div className="loading">
+      <LoadingComponent />
     </div>
+  ) : isError ? (
+    errorComponent
+  ) : (
+    data && (
+      <div className="main">
+        <Tabs>
+          {renderedOffices?.map((office: any, index: number) => {
+            return (
+              <Tab label={data[index].office.description} key={index}>
+                {office}
+              </Tab>
+            );
+          })}
+        </Tabs>
+      </div>
+    )
   );
 }
 

@@ -1,25 +1,25 @@
-import React, { useRef, useEffect } from "react";
-import { Canvas, useLoader, useThree } from "@react-three/fiber";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { Canvas } from "@react-three/fiber";
+import { useGLTF, Stage, PresentationControls } from "@react-three/drei";
 
-const Model = () => {
-  const modelRef = useRef<any>(null);
-  const { scene, camera, gl } = useThree();
-  const { nodes, materials } = useLoader(GLTFLoader, "./scene.gltf");
-
-  useEffect(() => {
-    modelRef.current!.add(nodes.Scene);
-    scene.add(modelRef.current);
-  }, [nodes, scene]);
-
-  return <div ref={modelRef} />;
+export const Model = (props: any) => {
+  const { scene } = useGLTF("/oc.glb");
+  return <primitive object={scene} {...props} />;
 };
 
 function ThreePage() {
   return (
-    <Canvas>
-      {/* <ambientLight /> */}
-      <Model />
+    <Canvas dpr={[1, 2]} shadows camera={{ fov: 45 }}>
+      <color attach="background" args={["red"]}></color>
+      <PresentationControls
+        speed={1.5}
+        global={false}
+        zoom={0.01}
+        polar={[-0.1, Math.PI / 4]}
+      >
+        <Stage environment={undefined}>
+          <Model scale={0.01}></Model>
+        </Stage>
+      </PresentationControls>
     </Canvas>
   );
 }

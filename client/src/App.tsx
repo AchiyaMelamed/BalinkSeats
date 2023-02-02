@@ -7,6 +7,7 @@ import { theme } from "./shared/utils/theme";
 import HomePage from "./pages/Home.page";
 import RegisterPage from "./pages/Register.page";
 import SigninPage from "./pages/Signin.page";
+import ThreePage from "./pages/Three.page";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/signin" element={<SigninPage />} />
+          <Route path="/three" element={<ThreePage />} />
         </Routes>
       </Router>
     </ThemeProvider>

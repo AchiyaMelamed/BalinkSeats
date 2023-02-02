@@ -1,5 +1,11 @@
 .rows-wrapper {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.2rem;
+  justify-content: center;
+}
+
+.column-rows {
+  width: 100%;
+  flex-direction: column-reverse;
 }

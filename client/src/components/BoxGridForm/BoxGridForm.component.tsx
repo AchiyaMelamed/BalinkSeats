@@ -2,6 +2,7 @@ import { Box, Grid, Typography } from "@mui/material";
 
 const FormWrapper = ({
   titleLabel,
+  titleOnHover,
   boxStyle,
   gridStyle,
   titleStyle,
@@ -9,6 +10,8 @@ const FormWrapper = ({
 }: any) => {
   return (
     <Box
+      component="div"
+      title={titleOnHover && titleLabel}
       sx={{
         border: 1,
         borderColor: "#A57CE1",
@@ -39,7 +42,7 @@ const FormWrapper = ({
             ...titleStyle,
           }}
         >
-          {titleLabel}
+          {!titleOnHover && titleLabel}
         </Typography>
         {children}
       </Grid>
