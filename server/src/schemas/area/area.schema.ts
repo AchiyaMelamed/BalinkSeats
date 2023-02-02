@@ -12,6 +12,8 @@ export class Area {
   number: string;
   @Prop({ required: true, unique: true })
   description: string;
+  @Prop({ required: true, unique: true })
+  position: [number, number];
   @Prop({ required: true })
   sumRows: number;
 }

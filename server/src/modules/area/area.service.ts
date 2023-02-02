@@ -72,6 +72,7 @@ export class AreaService {
       office,
       number: areaNumber,
       description: createAreaDto.description,
+      position: createAreaDto.position,
       sumRows: 0,
     });
     try {

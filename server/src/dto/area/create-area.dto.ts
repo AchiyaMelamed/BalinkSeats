@@ -6,4 +6,7 @@ export class CreateAreaDto {
 
   @ApiProperty()
   description: string;
+
+  @ApiProperty()
+  position: [number, number];
 }
