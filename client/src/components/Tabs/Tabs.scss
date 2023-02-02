@@ -1,0 +1,24 @@
+.tab-list {
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.tab-list-item {
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: border-bottom 0.2s ease-in-out;
+  border-radius: 50%;
+  &:active {
+    border-top: 2px solid #a57ce1;
+    transition: border-top 1s ease-in-out;
+  }
+}
+
+.active {
+  border-bottom: 2px solid #a57ce1;
+}

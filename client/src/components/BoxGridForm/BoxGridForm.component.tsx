@@ -1,6 +1,12 @@
 import { Box, Grid, Typography } from "@mui/material";
 
-const FormWrapper = ({ titleLabel, children }: any) => {
+const FormWrapper = ({
+  titleLabel,
+  boxStyle,
+  gridStyle,
+  titleStyle,
+  children,
+}: any) => {
   return (
     <Box
       sx={{
@@ -10,6 +16,7 @@ const FormWrapper = ({ titleLabel, children }: any) => {
         width: "20rem",
         borderRadius: 1,
         padding: "1rem",
+        ...boxStyle,
       }}
     >
       <Grid
@@ -18,16 +25,18 @@ const FormWrapper = ({ titleLabel, children }: any) => {
         justifyContent="flex-start"
         sx={{
           padding: "1rem 2rem",
+          ...gridStyle,
         }}
       >
         <Typography
           variant="h5"
           component="h1"
           sx={{
-            color: "#3D2C8D",
+            color: "#A57CE1 !important",
             fontWeight: 400,
             alignSelf: "center",
             marginBottom: 2,
+            ...titleStyle,
           }}
         >
           {titleLabel}
