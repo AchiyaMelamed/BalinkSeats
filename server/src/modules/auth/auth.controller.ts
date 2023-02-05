@@ -24,7 +24,9 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   loginUser(
     @Body() user: LoginUserDto,
-  ): Promise<{ token: string } | { ERROR: string }> {
+  ): Promise<
+    { token: string; name: string; email: string } | { ERROR: string }
+  > {
     return this.authService.loginUser(user);
   }
 }

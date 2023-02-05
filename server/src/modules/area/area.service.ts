@@ -116,4 +116,13 @@ export class AreaService {
       return await handleInvalidValueError(error);
     }
   }
+
+  async deleteAllAreas() {
+    try {
+      const res = await this.areaModel.deleteMany({}).exec();
+      return res;
+    } catch (error) {
+      return { ERROR: error.message };
+    }
+  }
 }

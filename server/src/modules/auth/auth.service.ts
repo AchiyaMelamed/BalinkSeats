@@ -77,15 +77,24 @@ export class AuthService {
     return this.userService._getUserDetails(user);
   }
 
-  async loginUser(
-    existingUser: LoginUserDto,
-  ): Promise<{ token: string } | { ERROR: string }> {
+  async loginUser(existingUser: LoginUserDto): Promise<
+    | {
+        token: string;
+        name: string;
+        email: string;
+      }
+    | { ERROR: string }
+  > {
     const { email, password } = existingUser;
     const user = await this.validateUser(email, password);
 
     if (user?.ERROR) return { ERROR: user.ERROR };
 
     const jwt = await this.jwtService.signAsync({ user });
-    return { token: jwt };
+    return {
+      token: jwt,
+      email,
+      name: user.name,
+    };
   }
 }

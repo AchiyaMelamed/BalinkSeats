@@ -9,6 +9,7 @@ import { ScheduledSeat } from '../../schemas';
 import { SeatService } from '../seat/seat.service';
 import { EmployeeService } from '../employee/employee.service';
 import handleInvalidValueError from '../../../utils/errorHandling/handleGetById';
+import isDatesOverlap from 'utils/datesAnalyze/isDatesOverlap';
 
 @Injectable()
 export class ScheduledSeatService {
@@ -20,11 +21,28 @@ export class ScheduledSeatService {
   ) {}
 
   async createScheduled(createScheduledSeatDto: CreateScheduledSeatDto) {
-    const startDate = new Date(createScheduledSeatDto.startDate);
-    const endDate = new Date(createScheduledSeatDto.endDate);
+    const startDate = new Date(createScheduledSeatDto.startDate).setHours(
+      0,
+      0,
+      0,
+      0,
+    );
+    const endDate = new Date(createScheduledSeatDto.endDate).setHours(
+      0,
+      0,
+      0,
+      0,
+    );
+    const today = new Date().setHours(0, 0, 0, 0);
     if (endDate < startDate) {
       return {
         ERROR: 'End date cannot be before start date',
+      };
+    }
+
+    if (startDate < today) {
+      return {
+        ERROR: 'Start date cannot be in the past',
       };
     }
 
@@ -34,6 +52,16 @@ export class ScheduledSeatService {
         number: createScheduledSeatDto.seatNumber,
       }),
     );
+    if (seat.ERROR) {
+      return seat;
+    }
+
+    const isScheduled = await this.isSeatScheduled(seat, startDate, endDate);
+    if (isScheduled) {
+      return {
+        ERROR: 'Seat is already scheduled for this time',
+      };
+    }
 
     const employee = await this.employeeService.findEmployee(
       Object.assign({
@@ -41,12 +69,19 @@ export class ScheduledSeatService {
         email: createScheduledSeatDto.employeeEmail,
       }),
     );
-
-    if (seat.ERROR) {
-      return seat;
-    }
     if (employee.ERROR) {
       return employee;
+    }
+
+    const isEmployeeHasSeat = await this.isEmployeeHasSeat(
+      employee,
+      startDate,
+      endDate,
+    );
+    if (isEmployeeHasSeat) {
+      return {
+        ERROR: `Employee already has a seat for this time (${isEmployeeHasSeat.seat.number})`,
+      };
     }
 
     const newScheduledSeat = new this.scheduledSeatModel({
@@ -55,11 +90,37 @@ export class ScheduledSeatService {
       startDate: createScheduledSeatDto.startDate,
       endDate: createScheduledSeatDto.endDate,
     });
-    return newScheduledSeat.save();
+
+    const res = await newScheduledSeat.save();
+    return {
+      seat: res.seat,
+      employee: res.employee,
+      startDate: res.startDate,
+      endDate: res.endDate,
+      id: res._id,
+    };
   }
 
-  findAllScheduled() {
-    return this.scheduledSeatModel.find().exec();
+  async findAllScheduled() {
+    const res = await this.scheduledSeatModel.find().exec();
+    const resWithEmployee = await Promise.all(
+      res.map(async (scheduledSeat) => {
+        const employee = await this.employeeService.findEmployee({
+          id: scheduledSeat.employee,
+        });
+        const seat = await this.seatService.findSeat({
+          id: scheduledSeat.seat,
+        });
+        return {
+          seat: { id: scheduledSeat.seat, number: seat.number },
+          employee: employee,
+          startDate: scheduledSeat.startDate,
+          endDate: scheduledSeat.endDate,
+          id: scheduledSeat._id,
+        };
+      }),
+    );
+    return resWithEmployee;
   }
 
   async findScheduledById(id: string) {
@@ -74,7 +135,7 @@ export class ScheduledSeatService {
     }
   }
 
-  async findBySeat({ seatId, seatNumber }) {
+  async findBySeat({ seatId = '', seatNumber = '' }) {
     const seat = await this.seatService.findSeat(
       Object.assign({ id: seatId, number: seatNumber }),
     );
@@ -85,10 +146,10 @@ export class ScheduledSeatService {
   }
 
   async findByEmployee({
-    employeeId,
-    employeeEmail,
-    employeeFirstName,
-    employeeLastName,
+    employeeId = '',
+    employeeEmail = '',
+    employeeFirstName = '',
+    employeeLastName = '',
   }) {
     const employee = await this.employeeService.findEmployee(
       Object.assign({
@@ -162,5 +223,52 @@ export class ScheduledSeatService {
     } catch (error) {
       return await handleInvalidValueError(error);
     }
+  }
+
+  async isSeatScheduled(seat, startDate, endDate) {
+    const seatScheduled = await this.findBySeat({ seatId: seat._id });
+    if (seatScheduled.ERROR) {
+      return seatScheduled;
+    }
+    return seatScheduled.some((scheduled) => {
+      const scheduledStartDate = new Date(scheduled.startDate).setHours(
+        0,
+        0,
+        0,
+        0,
+      );
+      const scheduledEndDate = new Date(scheduled.endDate).setHours(0, 0, 0, 0);
+      return isDatesOverlap(
+        [startDate, endDate],
+        [scheduledStartDate, scheduledEndDate],
+      );
+    });
+  }
+
+  async isEmployeeHasSeat(employee, startDate, endDate) {
+    const employeeScheduled = await this.findByEmployee({
+      employeeId: employee._id,
+    });
+    if (employeeScheduled.ERROR) {
+      return employeeScheduled;
+    }
+
+    const employeeSeatIndex = employeeScheduled.findIndex((scheduled) =>
+      isDatesOverlap(
+        [startDate, endDate],
+        [
+          scheduled.startDate.setHours(0, 0, 0, 0),
+          scheduled.endDate.setHours(0, 0, 0, 0),
+        ],
+      ),
+    );
+    if (employeeSeatIndex === -1) {
+      return false;
+    }
+    const seatId = employeeScheduled[employeeSeatIndex].seat;
+    const seat = await this.seatService.findSeat({
+      id: seatId,
+    });
+    return { seat: { number: seat.number, id: seatId } };
   }
 }

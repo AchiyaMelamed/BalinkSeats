@@ -54,4 +54,14 @@ export class AppService {
     }
     return data;
   }
+
+  async deleteAllData(): Promise<any> {
+    await this.seatService.deleteAllSeats();
+    await this.rowService.deleteAllRows();
+    await this.areaService.deleteAllAreas();
+    await this.officeService.deleteAllOffices();
+    return {
+      message: 'All data deleted',
+    };
+  }
 }

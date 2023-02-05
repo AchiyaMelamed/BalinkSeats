@@ -1,4 +1,4 @@
-import { Controller, Get, Inject } from '@nestjs/common';
+import { Controller, Delete, Get, Inject, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -13,5 +13,10 @@ export class AppController {
   @Get('data')
   async getData() {
     return await this.appService.getData();
+  }
+
+  @Delete('data')
+  async deleteAllData() {
+    return await this.appService.deleteAllData();
   }
 }

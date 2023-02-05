@@ -118,4 +118,13 @@ export class RowService {
       return await handleInvalidValueError(error);
     }
   }
+
+  async deleteAllRows() {
+    try {
+      const res = await this.rowModel.deleteMany({});
+      return res;
+    } catch (error) {
+      return await handleInvalidValueError(error);
+    }
+  }
 }

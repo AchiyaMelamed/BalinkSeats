@@ -77,4 +77,13 @@ export class OfficeService {
       return await handleInvalidValueError(error);
     }
   }
+
+  async deleteAllOffices() {
+    try {
+      const res = await this.officeModel.deleteMany({}).exec();
+      return res;
+    } catch (error) {
+      return { ERROR: error.message };
+    }
+  }
 }

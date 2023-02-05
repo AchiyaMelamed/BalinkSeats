@@ -15,7 +15,7 @@ import { JwtGuard } from '../auth/guards/jwt.guard';
 
 @ApiTags('ScheduledSeat')
 @Controller('scheduled')
-@UseGuards(JwtGuard)
+// @UseGuards(JwtGuard)
 export class ScheduledSeatController {
   constructor(private readonly scheduledSeatService: ScheduledSeatService) {}
 

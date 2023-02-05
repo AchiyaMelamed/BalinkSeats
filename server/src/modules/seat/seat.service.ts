@@ -21,7 +21,7 @@ export class SeatService {
     return this.seatModel.find().exec();
   }
 
-  async findSeat({ id, number, description, sitting, row, rowNumber }) {
+  async findSeat({ id, number, description, sitting, row, rowNumber }: any) {
     try {
       const res = id
         ? await this.findSeatById(id)
@@ -108,6 +108,15 @@ export class SeatService {
       await decreaseChildByOne(row, 'sumSeats');
 
       return seat;
+    } catch (error) {
+      return await handleInvalidValueError(error);
+    }
+  }
+
+  async deleteAllSeats() {
+    try {
+      const seats = await this.seatModel.deleteMany().exec();
+      return seats;
     } catch (error) {
       return await handleInvalidValueError(error);
     }
