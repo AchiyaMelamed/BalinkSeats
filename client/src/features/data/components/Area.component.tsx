@@ -33,9 +33,7 @@ const AreaComponent = ({ areaData }: any) => {
         width: "100%",
         margin: "0",
         padding: "0",
-        borderColor: "#96E5D1",
         borderWidth: "0.15rem",
-        borderStyle: "dotted",
         flex: "1 0",
         borderRadius: "5rem",
         gridRowStart: areaData.area.position[1] + 1,
@@ -45,7 +43,7 @@ const AreaComponent = ({ areaData }: any) => {
       titleStyle={{
         marginBottom: "0.1rem",
         fontSize: "1.3rem",
-        color: "#96E5D1 !important",
+        color: "#AF7AB3 !important",
         fontWeight: "500",
       }}
     >

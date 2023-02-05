@@ -25,12 +25,12 @@ const RowComponent = ({ rowData }: any) => {
       titleLabel={`${rowData.row.number.slice(8)} - ${rowData.row.description}`}
       titleOnHover={true}
       boxStyle={{
-        borderColor: "#AF7AB3",
+        // borderColor: "#AF7AB3",
         borderWidth: "0.1rem",
         borderStyle: "dotted",
         width: "fit-content",
         minWidth: `${
-          rowData.row.orientation === "horizontal" ? "80%" : "auto"
+          rowData.row.orientation === "horizontal" ? "100%" : "auto"
         }`,
         margin: "0",
         padding: "0",

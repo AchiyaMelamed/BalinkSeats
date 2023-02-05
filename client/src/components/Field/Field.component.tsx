@@ -7,6 +7,7 @@ const FieldComponent = ({
   name,
   type,
   label,
+  inputLabelStyle,
   inputColor,
   placeHolder,
   value,
@@ -26,7 +27,7 @@ const FieldComponent = ({
 
   return (
     <div className="field-wrapper" id={name}>
-      <InputLabel sx={{ fontWeight: 540 }} htmlFor={name}>
+      <InputLabel sx={{ fontWeight: 540, ...inputLabelStyle }} htmlFor={name}>
         {label}
       </InputLabel>
       <TextField

@@ -4,10 +4,12 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { apiAuthSlice } from "../../features/api/apiAuthSlice";
 import { apiDataSlice } from "../../features/api/apiDataSlice";
 import authReducer from "./authSlice";
+import dataReducer from "./dataSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    data: dataReducer,
     [apiAuthSlice.reducerPath]: apiAuthSlice.reducer,
     [apiDataSlice.reducerPath]: apiDataSlice.reducer,
   },

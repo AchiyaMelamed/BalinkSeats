@@ -126,11 +126,11 @@ const RegistrationFormComponent: FC = () => {
         results?.data?.ERROR
           ? results.data.ERROR === "Employee not found"
             ? {
-                label: `Email does not exists. Please contact your HR`,
+                label: `❌ Email does not exists. Please contact your HR`,
               }
             : results.data.ERROR === "Email already in use"
             ? {
-                label: "This email already has an account",
+                label: "❌ This email already has an account",
                 link: "/signin",
                 linkLabel: "SignIn",
               }
@@ -138,19 +138,18 @@ const RegistrationFormComponent: FC = () => {
               "First or/and last name do not match the employee record for this email"
             ? {
                 label:
-                  "First or/and last name do not match the employee record for this email",
+                  "❌ First or/and last name do not match the employee record for this email",
               }
-            : { label: "Something went wrong, Please try again" }
+            : { label: "❌ Something went wrong, Please try again" }
           : results.status === "rejected"
-          ? { label: "Something went wrong, Please try again" }
+          ? { label: "❌ Something went wrong, Please try again" }
           : { label: "" },
       [results.data, results.status]
     );
 
   const apiErrorComponent = (
     <SmallLabelComponent
-      divStyle={{ margin: 0, alignSelf: "center" }}
-      labelStyle={{ color: "red !important" }}
+      errorText={true}
       linkLabel={apiErrorLabel?.linkLabel}
       link={apiErrorLabel?.link}
     >

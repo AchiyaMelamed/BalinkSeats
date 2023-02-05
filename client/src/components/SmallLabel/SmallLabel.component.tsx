@@ -3,6 +3,8 @@ import LinkComponent from "../Link/Link.component";
 
 const SmallLabelComponent = ({
   labelStyle,
+  errorText,
+  successText,
   divStyle,
   linkLabel,
   link,
@@ -20,6 +22,11 @@ const SmallLabelComponent = ({
         width: "fit-content",
         margin: "auto",
         padding: "0.5rem",
+        color: errorText
+          ? "red !important"
+          : successText
+          ? "#91C483 !important"
+          : "",
         ...labelStyle,
       }}
     >
@@ -35,7 +42,8 @@ const SmallLabelComponent = ({
   return (
     <div
       style={{
-        marginTop: "1rem",
+        marginTop: errorText || successText ? "0" : "1rem",
+        alignSelf: errorText || successText ? "center" : "",
         display: "flex",
         textAlign: "center",
         ...divStyle,

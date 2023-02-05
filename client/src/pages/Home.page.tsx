@@ -1,15 +1,29 @@
 import "./Home.scss";
 
-import { useMemo } from "react";
-import { useGetDataQuery } from "../features/api/apiDataSlice";
+import { useEffect, useMemo } from "react";
+import {
+  useGetDataQuery,
+  useGetScheduledQuery,
+} from "../features/api/apiDataSlice";
 import OfficeComponent from "../features/data/components/Office.component";
 import Tabs, { Tab } from "../components/Tabs/Tabs.component";
 import LoadingComponent from "../components/Loading/Loading.component";
 import SmallLabelComponent from "../components/SmallLabel/SmallLabel.component";
+import { useAppDispatch, useAppSelector } from "../store/features/store";
+import { setScheduled } from "../store/features/dataSlice";
+import isToday from "../utils/datesCalculates/isToday";
 
 function HomePage() {
-  const { isLoading, isFetching, data, error, isError } =
-    useGetDataQuery("data");
+  const dispatch = useAppDispatch();
+  const { isLoading, data, error, isError } = useGetDataQuery("data");
+  const { data: dataScheduled } = useGetScheduledQuery("scheduled");
+  const signedUser = useAppSelector((state) => state.auth.signedUser);
+
+  useEffect(() => {
+    if (dataScheduled) {
+      dispatch(setScheduled(dataScheduled));
+    }
+  }, [dataScheduled, dispatch]);
 
   const renderedOffices = useMemo(
     () =>
@@ -35,7 +49,40 @@ function HomePage() {
         ERROR while loading data, please try again
       </SmallLabelComponent>
     );
-  }, [error]);
+  }, []);
+
+  const sittingToday = dataScheduled?.filter((scheduled: any) => {
+    return (
+      scheduled.employee.email === signedUser?.email &&
+      isToday(scheduled.startDate, scheduled.endDate)
+    );
+  })[0];
+
+  const sittingTodayComponent = useMemo(() => {
+    return (
+      <div className="sitting-today">
+        <SmallLabelComponent
+          labelStyle={{
+            color: "green !important",
+            fontWeight: "600",
+            fontSize: "1.5rem",
+          }}
+        >
+          You are sitting today at:
+        </SmallLabelComponent>
+        <SmallLabelComponent
+          labelStyle={{
+            color: "green !important",
+            fontWeight: "600",
+            fontSize: "1.5rem",
+          }}
+          key={sittingToday?.seat?.id}
+        >
+          {sittingToday?.seat?.number}
+        </SmallLabelComponent>
+      </div>
+    );
+  }, [sittingToday]);
 
   return isLoading ? (
     <div className="loading">
@@ -46,6 +93,7 @@ function HomePage() {
   ) : (
     data && (
       <div className="main">
+        {sittingTodayComponent}
         <Tabs>
           {renderedOffices?.map((office: any, index: number) => {
             return (

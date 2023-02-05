@@ -14,7 +14,7 @@ const FormWrapper = ({
       title={titleOnHover && titleLabel}
       sx={{
         border: 1,
-        borderColor: "#A57CE1",
+        // borderColor: "#A57CE1",
         marginTop: 5,
         width: "20rem",
         borderRadius: 1,

@@ -14,7 +14,8 @@ const OfficeComponent = ({ officeData }: any) => {
         className="areas-wrapper"
         style={{
           display: "grid",
-          gridTemplateColumns: `repeat(${maxX + 1}, ${100 / (maxX + 1)}%)`,
+          gridTemplateColumns: `${maxX > 0 ? "min-content" : ""}`,
+          gap: "2rem",
         }}
       >
         {officeData.areas?.map((areaData: any) => {
@@ -33,7 +34,7 @@ const OfficeComponent = ({ officeData }: any) => {
         padding: "0",
         borderWidth: "0.2rem",
         borderRadius: "5rem",
-        borderStyle: "dotted",
+        borderStyle: "double",
       }}
       gridStyle={{
         padding: "0.5rem 1rem 1rem",

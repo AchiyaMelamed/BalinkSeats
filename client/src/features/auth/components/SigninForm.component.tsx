@@ -1,9 +1,11 @@
 import { FC, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import FormWrapper from "../../../components/BoxGridForm/BoxGridForm.component";
 import FormComponent from "../../../components/Form";
 import SmallLabelComponent from "../../../components/SmallLabel/SmallLabel.component";
 import {
   clearSigninDetails,
+  setSignedUser,
   setSigninEmail,
   setSigninPassword,
 } from "../../../store/features/authSlice";
@@ -13,6 +15,7 @@ import { UserSignin } from "../models/UserSignin";
 
 const SigninFormComponent: FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [signin, results] = useSigninMutation();
   const emailValue = useAppSelector((state) => state.auth.signin.email);
   const passwordValue = useAppSelector((state) => state.auth.signin.password);
@@ -47,8 +50,9 @@ const SigninFormComponent: FC = () => {
     };
     signin(userSignin).then((res: any) => {
       if (res.data && !res.data.ERROR) {
+        dispatch(setSignedUser({ ...res.data }));
         dispatch(clearSigninDetails());
-        window.location.href = "/";
+        navigate("/");
       }
     });
   };
@@ -58,21 +62,20 @@ const SigninFormComponent: FC = () => {
       () =>
         results?.data?.ERROR
           ? {
-              label: `Email or Password is incorrect`,
+              label: `❌ Email or Password is incorrect`,
 
               link: "/register",
               linkLabel: "Register",
             }
           : results.status === "rejected"
-          ? { label: "Something went wrong, Please try again" }
+          ? { label: "❌ Something went wrong, Please try again" }
           : { label: "" },
       [results.data, results.status]
     );
 
   const apiErrorComponent = (
     <SmallLabelComponent
-      divStyle={{ margin: 0, alignSelf: "center" }}
-      labelStyle={{ color: "red !important" }}
+      errorText={true}
       linkLabel={apiErrorLabel?.linkLabel}
       link={apiErrorLabel?.link}
     >

@@ -14,6 +14,7 @@ const FormComponent = ({
   bottomLineAfterStyle,
   bottomLineHoverStyle,
   fieldsDivStyle,
+  inputLabelStyle,
   submitButtonStyle,
   submitButtonHoverStyle,
   submitButtonLabel,
@@ -39,6 +40,7 @@ const FormComponent = ({
             label={field.label}
             placeHolder={field.placeHolder}
             value={field.value}
+            inputLabelStyle={inputLabelStyle}
             onChange={field.onChange}
             width={field.width}
             required={field.required}
