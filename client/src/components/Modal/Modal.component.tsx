@@ -17,6 +17,7 @@ const ModalComponent = ({
         sx: {
           alignItems: "center",
           justifyContent: "center",
+          width: "70%",
           ...modalStyle,
         },
       }}
