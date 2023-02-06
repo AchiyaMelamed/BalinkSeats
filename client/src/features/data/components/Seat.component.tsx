@@ -19,7 +19,7 @@ const SeatComponent = ({ seatData }: any) => {
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
 
-  const signedUser = useAppSelector((state) => state.auth.signedUser);
+  const signedUser = useAppSelector((state) => state.signed.signedUser);
   const scheduled = useAppSelector((state) => state.data.scheduled);
   const [schedule, results] = useScheduleSeatMutation();
   const scheduleFor = useAppSelector((state) => state.data.scheduleFor);

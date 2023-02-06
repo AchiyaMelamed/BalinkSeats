@@ -27,11 +27,6 @@ const ScheduleSeatModalComponent = ({
   formFields,
 }: any) => {
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    if (signedUser) {
-      dispatch(setScheduleFor(signedUser));
-    }
-  }, [signedUser, dispatch]);
 
   const filteredSeatSchedules = useMemo(() => {
     if (seatSchedules && seatSchedules.length > 0) {

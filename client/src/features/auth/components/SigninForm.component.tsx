@@ -5,10 +5,10 @@ import FormComponent from "../../../components/Form";
 import SmallLabelComponent from "../../../components/SmallLabel/SmallLabel.component";
 import {
   clearSigninDetails,
-  setSignedUser,
   setSigninEmail,
   setSigninPassword,
 } from "../../../store/features/authSlice";
+import { setSignedUser } from "../../../store/features/signedUserSlice";
 import { useAppDispatch, useAppSelector } from "../../../store/features/store";
 import { useSigninMutation } from "../../api/apiAuthSlice";
 import { UserSignin } from "../models/UserSignin";

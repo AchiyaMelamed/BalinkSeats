@@ -12,12 +12,15 @@ import SmallLabelComponent from "../components/SmallLabel/SmallLabel.component";
 import { useAppDispatch, useAppSelector } from "../store/features/store";
 import { setScheduled } from "../store/features/dataSlice";
 import isToday from "../utils/datesCalculates/isToday";
+import { logoutUser } from "../store/features/signedUserSlice";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { isLoading, data, error, isError } = useGetDataQuery("data");
   const { data: dataScheduled } = useGetScheduledQuery("scheduled");
-  const signedUser = useAppSelector((state) => state.auth.signedUser);
+  const signedUser = useAppSelector((state) => state.signed.signedUser);
 
   useEffect(() => {
     if (dataScheduled) {
@@ -68,16 +71,7 @@ function HomePage() {
             fontSize: "1.5rem",
           }}
         >
-          You are sitting today at:
-        </SmallLabelComponent>
-        <SmallLabelComponent
-          labelStyle={{
-            color: "green !important",
-            fontWeight: "600",
-            fontSize: "1.5rem",
-          }}
-          key={sittingToday?.seat?.id}
-        >
+          You are sitting today at: <br />
           {sittingToday?.seat?.number}
         </SmallLabelComponent>
       </div>
@@ -93,7 +87,22 @@ function HomePage() {
   ) : (
     data && (
       <div className="main">
-        {sittingTodayComponent}
+        {signedUser.token && (
+          <>
+            <button
+              onClick={() => {
+                dispatch(logoutUser());
+                navigate(0);
+              }}
+              style={{
+                backgroundColor: "purple",
+              }}
+            >
+              LogOut
+            </button>
+            <div>{sittingTodayComponent}</div>
+          </>
+        )}
         <Tabs>
           {renderedOffices?.map((office: any, index: number) => {
             return (

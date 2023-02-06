@@ -31,7 +31,6 @@ export const authSlice = createSlice({
   initialState: {
     register: initialRegisterState,
     signin: initialSigninState,
-    signedUser: { name: "", email: "" },
   },
   reducers: {
     setRegisterDetails: (
@@ -88,17 +87,6 @@ export const authSlice = createSlice({
     clearSigninDetails: (state) => {
       state.signin = initialSigninState;
     },
-
-    setSignedUser: (
-      state,
-      action: PayloadAction<{
-        name: string;
-        email: string;
-      }>
-    ) => {
-      state.signedUser.name = action.payload.name;
-      state.signedUser.email = action.payload.email;
-    },
   },
 });
 
@@ -115,5 +103,4 @@ export const {
   setSigninEmail,
   setSigninPassword,
   clearSigninDetails,
-  setSignedUser,
 } = authSlice.actions;
