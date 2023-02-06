@@ -2,10 +2,15 @@ import "./ScheduleSeatModal.scss";
 
 import DialogTitle from "@mui/material/DialogTitle";
 import moment from "moment";
-import React, { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import FormComponent from "../../Form";
 import SmallLabelComponent from "../../SmallLabel/SmallLabel.component";
 import ModalComponent from "../Modal.component";
+import DropdownComponent from "../../Dropdown/Dropdown.component";
+import { OptionUnstyled } from "@mui/base";
+import { useGetAllEmployeesQuery } from "../../../features/api/apiDataSlice";
+import { useAppDispatch, useAppSelector } from "../../../store/features/store";
+import { setScheduleFor } from "../../../store/features/dataSlice";
 
 const ScheduleSeatModalComponent = ({
   showModal,
@@ -21,20 +26,30 @@ const ScheduleSeatModalComponent = ({
   successComponent,
   formFields,
 }: any) => {
-  const orderedSeatSchedules = useMemo(() => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (signedUser) {
+      dispatch(setScheduleFor(signedUser));
+    }
+  }, [signedUser, dispatch]);
+
+  const filteredSeatSchedules = useMemo(() => {
     if (seatSchedules && seatSchedules.length > 0) {
-      const res = {} as any;
-      for (const scheduled of seatSchedules) {
-        if (!res[scheduled?.employee?._id]) {
-          res[scheduled.employee._id] = {
-            name: `${scheduled.employee.firstName} ${scheduled.employee.lastName}`,
-            schedules: [scheduled],
-          };
-        } else {
-          res[scheduled.employee._id].schedules.push(scheduled);
-        }
-      }
-      return res;
+      return seatSchedules
+        .filter(
+          (scheduled: any) =>
+            new Date(scheduled.endDate).setHours(0, 0, 0, 0) >=
+            new Date().setHours(0, 0, 0, 0)
+        )
+        .sort((a: any, b: any) => {
+          if (a.startDate < b.startDate) {
+            return -1;
+          }
+          if (a.startDate > b.startDate) {
+            return 1;
+          }
+          return 0;
+        });
     }
   }, [seatSchedules]);
 
@@ -59,43 +74,46 @@ const ScheduleSeatModalComponent = ({
     () => (
       <>
         {allScheduledTitle}
-        {orderedSeatSchedules ? (
-          Object.keys(orderedSeatSchedules).map((employeeId: string) => {
-            return (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                key={employeeId}
-              >
-                <DialogTitle
-                  sx={{
-                    padding: "0.5rem 0 0.2rem",
-                    color: "#301E67 !important",
-                    fontWeight: "500",
-                    fontSize: "1.2rem",
+        {filteredSeatSchedules ? (
+          filteredSeatSchedules.map(
+            (schedule: {
+              id: string;
+              employee: { _id: string; firstName: string; lastName: string };
+              seat: { id: string; number: string };
+              startDate: string;
+              endDate: string;
+            }) => {
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "0.5rem",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
+                  key={schedule.id}
                 >
-                  {orderedSeatSchedules[employeeId].name}:
-                </DialogTitle>
-                {orderedSeatSchedules[employeeId].schedules.map(
-                  (schedule: any) => (
-                    <SmallLabelComponent
-                      labelStyle={{ padding: 0, color: "#A61F69 !important" }}
-                      divStyle={{ marginTop: 0 }}
-                      key={schedule.id}
-                    >
-                      {moment(schedule.startDate).format("DD-MM-YYYY")} -
-                      {moment(schedule.endDate).format("DD-MM-YYYY")}
-                    </SmallLabelComponent>
-                  )
-                )}
-              </div>
-            );
-          })
+                  <DialogTitle
+                    sx={{
+                      padding: "0",
+                      color: "#301E67 !important",
+                      fontWeight: "600",
+                      fontSize: "1rem",
+                    }}
+                  >
+                    {moment(schedule.startDate).format("DD-MM-YYYY")} -
+                    {moment(schedule.endDate).format("DD-MM-YYYY")}
+                  </DialogTitle>
+                  <SmallLabelComponent
+                    labelStyle={{ padding: 0, color: "#A61F69 !important" }}
+                    divStyle={{ marginTop: 0 }}
+                  >
+                    {schedule.employee.firstName} {schedule.employee.lastName}
+                  </SmallLabelComponent>
+                </div>
+              );
+            }
+          )
         ) : (
           <SmallLabelComponent labelStyle={{ color: "red !important" }}>
             No Scheduled for this seat
@@ -103,10 +121,12 @@ const ScheduleSeatModalComponent = ({
         )}
       </>
     ),
-    [orderedSeatSchedules, seatSchedules]
+    [filteredSeatSchedules, allScheduledTitle]
   );
 
-  const scheduleSeatModal = (
+  const { data: allEmployees } = useGetAllEmployeesQuery("employees");
+
+  const scheduleSeatModal = allEmployees && (
     <ModalComponent
       open={showModal}
       title={`Schedule Seat for`}
@@ -114,17 +134,29 @@ const ScheduleSeatModalComponent = ({
       onClose={onCloseModal}
       secondModal={allScheduledModal || null}
     >
-      <DialogTitle
-        sx={{
-          padding: 0,
-          textAlign: "center",
-          color: "#A084DC !important",
-          fontWeight: "600",
-          marginBottom: "0.5rem",
+      <DropdownComponent
+        options={allEmployees}
+        selected={
+          allEmployees.find(
+            (employee: any) => employee.email === signedUser.email
+          ) || null
+        }
+        handleSelect={(event: any, newValue: any) => {
+          if (newValue)
+            dispatch(
+              setScheduleFor({
+                name: `${newValue.firstName} ${newValue.lastName}`,
+                email: newValue.email,
+              })
+            );
         }}
-      >
-        {signedUser.name}
-      </DialogTitle>
+        getOptionLabel={(option: any) =>
+          `${option.firstName} ${option.lastName} - ${option.email}`
+        }
+        isOptionEqualToValue={(option: any, value: any) =>
+          option._id === value._id
+        }
+      ></DropdownComponent>
       {successLabel?.label !== "" && successComponent}
       {errorLabel?.label !== "" && errorComponent}
       <SmallLabelComponent
@@ -135,7 +167,6 @@ const ScheduleSeatModalComponent = ({
       </SmallLabelComponent>
       <FormComponent
         fields={formFields}
-        titleLabel="Please fill the fields below to schedule a seat"
         inputLabelStyle={{ color: "#A61F69 !important" }}
         submitButtonLabel="Schedule"
         requestStatus={results.status}

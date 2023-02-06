@@ -2,10 +2,7 @@ import "./Seat.scss";
 
 import { GiOfficeChair } from "react-icons/gi";
 import { useAppDispatch, useAppSelector } from "../../../store/features/store";
-import {
-  useGetEmployeeByIdQuery,
-  useScheduleSeatMutation,
-} from "../../api/apiDataSlice";
+import { useScheduleSeatMutation } from "../../api/apiDataSlice";
 import { useMemo, useState, useCallback, useEffect } from "react";
 import ModalComponent from "../../../components/Modal/Modal.component";
 import FormComponent from "../../../components/Form";
@@ -25,6 +22,7 @@ const SeatComponent = ({ seatData }: any) => {
   const signedUser = useAppSelector((state) => state.auth.signedUser);
   const scheduled = useAppSelector((state) => state.data.scheduled);
   const [schedule, results] = useScheduleSeatMutation();
+  const scheduleFor = useAppSelector((state) => state.data.scheduleFor);
 
   const fields = useMemo(() => {
     return [
@@ -54,12 +52,12 @@ const SeatComponent = ({ seatData }: any) => {
       e.preventDefault();
       schedule({
         seat: seatData.seat._id,
-        employeeEmail: signedUser.email,
+        employeeEmail: scheduleFor.email || signedUser.email,
         startDate,
         endDate,
       });
     },
-    [schedule, seatData, signedUser, startDate, endDate]
+    [schedule, seatData, signedUser, startDate, endDate, scheduleFor]
   );
 
   let errorComponent = useMemo(() => {

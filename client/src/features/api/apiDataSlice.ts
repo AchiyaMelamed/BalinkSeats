@@ -26,6 +26,12 @@ export const apiDataSlice = createApi({
         body: data,
       }),
     }),
+    getAllEmployees: builder.query({
+      query: () => ({
+        url: "/employee",
+        method: "GET",
+      }),
+    }),
     getEmployeeById: builder.query({
       query: (id: string) => ({
         url: `/employee/${id}`,
@@ -39,5 +45,6 @@ export const {
   useGetDataQuery,
   useGetScheduledQuery,
   useScheduleSeatMutation,
+  useGetAllEmployeesQuery,
   useGetEmployeeByIdQuery,
 } = apiDataSlice;
