@@ -2,15 +2,20 @@ import "./ScheduleSeatModal.scss";
 
 import DialogTitle from "@mui/material/DialogTitle";
 import moment from "moment";
-import { useMemo, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import FormComponent from "../../Form";
 import SmallLabelComponent from "../../SmallLabel/SmallLabel.component";
 import ModalComponent from "../Modal.component";
 import DropdownComponent from "../../Dropdown/Dropdown.component";
 import { OptionUnstyled } from "@mui/base";
-import { useGetAllEmployeesQuery } from "../../../features/api/apiDataSlice";
+import {
+  useDeleteScheduleMutation,
+  useGetAllEmployeesQuery,
+} from "../../../features/api/apiDataSlice";
 import { useAppDispatch, useAppSelector } from "../../../store/features/store";
 import { setScheduleFor } from "../../../store/features/dataSlice";
+import PermissionComponent from "../../../features/Permissions/components/Permission.component";
+import DeleteScheduleComponent from "../../../features/data/components/DeleteSchedule/DeleteSchedule.component";
 
 const ScheduleSeatModalComponent = ({
   showModal,
@@ -27,6 +32,7 @@ const ScheduleSeatModalComponent = ({
   formFields,
 }: any) => {
   const dispatch = useAppDispatch();
+  const [deleteSchedule, resultsDeleteSchedule] = useDeleteScheduleMutation();
 
   const filteredSeatSchedules = useMemo(() => {
     if (seatSchedules && seatSchedules.length > 0) {
@@ -47,6 +53,29 @@ const ScheduleSeatModalComponent = ({
         });
     }
   }, [seatSchedules]);
+
+  const handleDeleteSchedule = useCallback(
+    (schedule: any) => {
+      deleteSchedule(schedule.id);
+    },
+    [deleteSchedule]
+  );
+
+  useEffect(() => {
+    if (
+      resultsDeleteSchedule?.status === "rejected" ||
+      resultsDeleteSchedule?.data?.ERROR
+    ) {
+      alert(
+        `Error deleting schedule: ${
+          resultsDeleteSchedule?.data?.ERROR
+            ? resultsDeleteSchedule?.data?.ERROR
+            : JSON.parse(JSON.stringify(resultsDeleteSchedule?.error))?.data
+                ?.message
+        }`
+      );
+    }
+  }, [resultsDeleteSchedule]);
 
   const allScheduledTitle = useMemo(
     () => (
@@ -73,7 +102,12 @@ const ScheduleSeatModalComponent = ({
           filteredSeatSchedules.map(
             (schedule: {
               id: string;
-              employee: { _id: string; firstName: string; lastName: string };
+              employee: {
+                _id: string;
+                firstName: string;
+                lastName: string;
+                email: string;
+              };
               seat: { id: string; number: string };
               startDate: string;
               endDate: string;
@@ -85,6 +119,10 @@ const ScheduleSeatModalComponent = ({
                     gap: "0.5rem",
                     justifyContent: "center",
                     alignItems: "center",
+                    borderRadius: "0.5rem",
+                    padding: "1rem",
+                    marginBottom: "0.5rem",
+                    boxShadow: " rgba(0, 0, 0, 0.35) 0px 5px 15px",
                   }}
                   key={schedule.id}
                 >
@@ -105,6 +143,15 @@ const ScheduleSeatModalComponent = ({
                   >
                     {schedule.employee.firstName} {schedule.employee.lastName}
                   </SmallLabelComponent>
+                  <PermissionComponent
+                    levelPermitted={"Admin"}
+                    emailPermitted={schedule.employee.email}
+                  >
+                    <DeleteScheduleComponent
+                      schedule={schedule}
+                      onClick={() => handleDeleteSchedule(schedule)}
+                    />
+                  </PermissionComponent>
                 </div>
               );
             }
@@ -123,35 +170,52 @@ const ScheduleSeatModalComponent = ({
 
   const scheduleSeatModal = allEmployees && (
     <ModalComponent
+      modalStyle={{ width: "100%", maxWidth: "60vw", padding: "0.5rem" }}
       open={showModal}
       title={`Schedule Seat for`}
       titleStyle={{ textAlign: "center", padding: "0.5rem 0 0 0" }}
       onClose={onCloseModal}
       secondModal={allScheduledModal || null}
     >
-      <DropdownComponent
-        options={allEmployees}
-        selected={
-          allEmployees.find(
-            (employee: any) => employee.email === signedUser.email
-          ) || null
+      <PermissionComponent
+        levelPermitted={"Admin"}
+        showInstead={
+          <SmallLabelComponent
+            labelStyle={{
+              color: "#5e2f7b !important",
+              fontWeight: "600",
+              fontSize: "1.2rem",
+            }}
+            divStyle={{ margin: "0" }}
+          >
+            {signedUser.name}
+          </SmallLabelComponent>
         }
-        handleSelect={(event: any, newValue: any) => {
-          if (newValue)
-            dispatch(
-              setScheduleFor({
-                name: `${newValue.firstName} ${newValue.lastName}`,
-                email: newValue.email,
-              })
-            );
-        }}
-        getOptionLabel={(option: any) =>
-          `${option.firstName} ${option.lastName} - ${option.email}`
-        }
-        isOptionEqualToValue={(option: any, value: any) =>
-          option._id === value._id
-        }
-      ></DropdownComponent>
+      >
+        <DropdownComponent
+          options={allEmployees}
+          selected={
+            allEmployees.find(
+              (employee: any) => employee.email === signedUser.email
+            ) || null
+          }
+          handleSelect={(event: any, newValue: any) => {
+            if (newValue)
+              dispatch(
+                setScheduleFor({
+                  name: `${newValue.firstName} ${newValue.lastName}`,
+                  email: newValue.email,
+                })
+              );
+          }}
+          getOptionLabel={(option: any) =>
+            `${option.firstName} ${option.lastName} - ${option.email}`
+          }
+          isOptionEqualToValue={(option: any, value: any) =>
+            option._id === value._id
+          }
+        ></DropdownComponent>
+      </PermissionComponent>
       {successLabel?.label !== "" && successComponent}
       {errorLabel?.label !== "" && errorComponent}
       <SmallLabelComponent

@@ -26,6 +26,13 @@ export const apiDataSlice = createApi({
         body: data,
       }),
     }),
+    deleteSchedule: builder.mutation({
+      invalidatesTags: ["Scheduled"],
+      query: (id: string) => ({
+        url: `/scheduled/${id}`,
+        method: "DELETE",
+      }),
+    }),
     getAllEmployees: builder.query({
       query: () => ({
         url: "/employee",
@@ -47,4 +54,5 @@ export const {
   useScheduleSeatMutation,
   useGetAllEmployeesQuery,
   useGetEmployeeByIdQuery,
+  useDeleteScheduleMutation,
 } = apiDataSlice;

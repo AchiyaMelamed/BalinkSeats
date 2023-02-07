@@ -159,8 +159,36 @@ function ResponsiveAppBar({ pages, actions }: any) {
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title={signedUser?.name || "Please Sign In"}>
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={signedUser.name}>{signedUser?.name[0]}</Avatar>
+              <IconButton
+                onClick={handleOpenUserMenu}
+                sx={{ p: 0, display: "flex", flexDirection: "column" }}
+              >
+                <Avatar
+                  alt={signedUser.name}
+                  sx={{
+                    border: "2px solid",
+                    borderColor:
+                      signedUser.level === "Admin" ? "orange !important" : null,
+                    width: "2rem",
+                    height: "2rem",
+                  }}
+                >
+                  {signedUser?.name[0]}
+                </Avatar>
+                {signedUser?.level === "Admin" && (
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      color: "orange",
+                      fontSize: "0.5rem",
+                      fontWeight: 700,
+                      letterSpacing: ".1rem",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Admin
+                  </Typography>
+                )}
               </IconButton>
             </Tooltip>
             <Menu

@@ -11,6 +11,7 @@ const DropdownComponent = ({
 }: any) => {
   return (
     <Autocomplete
+      sx={{ width: "25vw" }}
       renderInput={(params) => (
         <TextField
           {...params}

@@ -18,6 +18,7 @@ const ModalComponent = ({
           alignItems: "center",
           justifyContent: "center",
           width: "70%",
+          borderRadius: "0.5rem",
           ...modalStyle,
         },
       }}
@@ -40,6 +41,8 @@ const ModalComponent = ({
           gap: "1rem",
           width: "100%",
           justifyContent: "center",
+          height: "fit-content",
+          maxHeight: "80vh",
         }}
       >
         <div
@@ -48,7 +51,7 @@ const ModalComponent = ({
             justifyContent: "center",
             display: "flex",
             flexDirection: "column",
-            width: "100%",
+            width: secondModal ? "50%" : "100%",
           }}
         >
           <DialogTitle

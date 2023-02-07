@@ -16,6 +16,7 @@ import { logoutUser } from "../store/features/signedUserSlice";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import ModalComponent from "../components/Modal/Modal.component";
+import SittingTodayComponent from "../features/data/components/SittingToday/SittingToday.component";
 
 function HomePage() {
   const [showSittingToday, setShowSittingToday] = useState(false);
@@ -23,7 +24,10 @@ function HomePage() {
   const navigate = useNavigate();
   const { isLoading, data, error, isError } = useGetDataQuery("data");
   const { data: dataScheduled } = useGetScheduledQuery("scheduled");
-  const signedUser = useAppSelector((state) => state.signed.signedUser);
+  const [signedUser, isSigned] = useAppSelector((state) => [
+    state.signed.signedUser,
+    state.signed.isSigned,
+  ]);
 
   useEffect(() => {
     if (dataScheduled) {
@@ -64,62 +68,6 @@ function HomePage() {
     );
   })[0];
 
-  const officeSittingToday = useMemo(() => {
-    return data?.filter((office: any) => {
-      return office?.office.number === sittingToday?.seat?.number.split("-")[0];
-    })[0];
-  }, [data, sittingToday]);
-
-  const areaSittingToday = useMemo(() => {
-    return officeSittingToday?.areas?.filter((area: any) => {
-      return area?.area?.number === sittingToday?.seat?.number.slice(0, 7);
-    })[0];
-  }, [officeSittingToday, sittingToday]);
-
-  const rowSittingToday = useMemo(() => {
-    return areaSittingToday?.rows?.filter((row: any) => {
-      return row?.row?.number === sittingToday?.seat?.number.slice(0, 11);
-    })[0];
-  }, [areaSittingToday, sittingToday]);
-
-  const sittingTodayComponent = useMemo(() => {
-    return (
-      <SmallLabelComponent
-        divStyle={{
-          margin: "0",
-          textAlign: "start",
-          position: "fixed",
-          zIndex: "1",
-          backgroundColor: "#000000",
-          opacity: "0.8",
-          borderRadius: "0.5rem",
-        }}
-        labelStyle={{
-          userSelect: "text",
-          color: "#09ffd680 !important",
-          fontWeight: "600",
-          fontSize: "0.8rem",
-          border: "#88ffeb80 1px solid",
-          borderRadius: "0.5rem",
-          margin: "0",
-        }}
-      >
-        <u>Office:</u> {officeSittingToday?.office?.description} (
-        {officeSittingToday?.office?.number})
-        <br />
-        <u>Area:</u> {areaSittingToday?.area?.description} (
-        {areaSittingToday?.area?.number.split("-")[1]})
-        <br />
-        <u>Row:</u> {rowSittingToday?.row?.description} (
-        {rowSittingToday?.row?.number.split("-")[2]})
-        <br />
-        <u>Seat:</u> ({sittingToday?.seat.number.split("-")[3]})
-        <br />
-        <i>Enjoy!</i>
-      </SmallLabelComponent>
-    );
-  }, [sittingToday, officeSittingToday, areaSittingToday, rowSittingToday]);
-
   return isLoading ? (
     <div className="loading">
       <LoadingComponent />
@@ -129,7 +77,7 @@ function HomePage() {
   ) : (
     data && (
       <div className="main">
-        {sittingToday && (
+        {
           <Button
             sx={{
               color: "#88ffeb80 !important",
@@ -140,8 +88,10 @@ function HomePage() {
           >
             Where I sit Today?
           </Button>
+        }
+        {showSittingToday && (
+          <SittingTodayComponent data={data} sittingToday={sittingToday} />
         )}
-        {showSittingToday && sittingTodayComponent}
         <Tabs>
           {renderedOffices?.map((office: any, index: number) => {
             return (
