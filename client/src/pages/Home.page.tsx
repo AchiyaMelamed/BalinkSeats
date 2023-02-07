@@ -86,7 +86,7 @@ function HomePage() {
             }}
             onClick={() => setShowSittingToday(!showSittingToday)}
           >
-            Where I sit Today?
+            Where am I sitting Today?
           </Button>
         }
         {showSittingToday && (
