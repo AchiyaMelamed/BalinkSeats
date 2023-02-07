@@ -28,13 +28,14 @@ const OfficeComponent = ({ officeData }: any) => {
   return (
     <FormWrapper
       boxStyle={{
-        width: "90%",
+        width: "95%",
         maxHeight: "80%",
         overflow: "auto",
         padding: "0",
         borderWidth: "0.2rem",
         borderRadius: "5rem",
         borderStyle: "double",
+        margin: "0",
       }}
       gridStyle={{
         padding: "0.5rem 1rem 1rem",

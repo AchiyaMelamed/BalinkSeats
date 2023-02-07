@@ -1,0 +1,17 @@
+.footer-wrapper {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  background: #7b46a6 !important;
+  opacity: 1;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}

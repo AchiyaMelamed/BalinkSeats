@@ -1,12 +1,11 @@
 import "./Seat.scss";
 
-import { GiOfficeChair } from "react-icons/gi";
-import { useAppDispatch, useAppSelector } from "../../../store/features/store";
-import { useScheduleSeatMutation } from "../../api/apiDataSlice";
-import { useMemo, useState, useCallback, useEffect } from "react";
-import ModalComponent from "../../../components/Modal/Modal.component";
-import FormComponent from "../../../components/Form";
 import moment from "moment";
+import { GiOfficeChair } from "react-icons/gi";
+import { useMemo, useState, useCallback, useEffect } from "react";
+
+import { useAppSelector } from "../../../store/features/store";
+import { useScheduleSeatMutation } from "../../api/apiDataSlice";
 import SmallLabelComponent from "../../../components/SmallLabel/SmallLabel.component";
 import ScheduleSeatModalComponent from "../../../components/Modal/ScheduleSeatModalComponent/ScheduleSeatModal.component";
 import isToday from "../../../utils/datesCalculates/isToday";
@@ -19,7 +18,10 @@ const SeatComponent = ({ seatData }: any) => {
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
 
-  const signedUser = useAppSelector((state) => state.signed.signedUser);
+  const [signedUser, isSigned] = useAppSelector((state) => [
+    state.signed.signedUser,
+    state.signed.isSigned,
+  ]);
   const scheduled = useAppSelector((state) => state.data.scheduled);
   const [schedule, results] = useScheduleSeatMutation();
   const scheduleFor = useAppSelector((state) => state.data.scheduleFor);
@@ -121,6 +123,11 @@ const SeatComponent = ({ seatData }: any) => {
     return !sittingName ? "available-seat" : "not-available-seat";
   }, [sittingName]);
 
+  const isSignedSittingClassName = useMemo(
+    () => (isSigned && signedUser.name === sittingName ? "signed-sitting" : ""),
+    [signedUser.name, sittingName, isSigned]
+  );
+
   const modal = useMemo(
     () => (
       <ScheduleSeatModalComponent
@@ -158,7 +165,7 @@ const SeatComponent = ({ seatData }: any) => {
     <>
       {modal}
       <div
-        className={`seat-wrapper ${isAvailableClass}`}
+        className={`seat-wrapper ${isAvailableClass} ${isSignedSittingClassName}`}
         title={`Click to schedule (${seatData.seat.number}})`}
         onClick={() => handleClick()}
       >

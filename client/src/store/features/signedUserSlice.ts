@@ -4,6 +4,7 @@ export const signedUserSlice = createSlice({
   name: "signed",
   initialState: {
     signedUser: { name: "", email: "", token: "" },
+    isSigned: false,
   },
   reducers: {
     setSignedUser: (
@@ -17,6 +18,7 @@ export const signedUserSlice = createSlice({
       state.signedUser.name = action.payload.name;
       state.signedUser.email = action.payload.email;
       state.signedUser.token = action.payload.token;
+      state.isSigned = true;
     },
     logoutUser: () => {},
   },

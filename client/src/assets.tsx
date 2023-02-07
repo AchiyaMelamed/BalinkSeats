@@ -1,2 +1,2 @@
-export const BALINK_LOGO_NO_BG = "/balink-logo-no-bg.png";
-export const BALINK_LOGO = "./balink-logo.jpeg";
+export const BALINK_LOGO_NO_BG = "./images/balink-logo-no-bg.png";
+export const BALINK_LOGO = "./images/balink-logo.jpeg";

@@ -11,6 +11,10 @@
   border: 1px solid #ffffff;
 }
 
+.signed-sitting {
+  background: transparentize($color: #88ffeb, $amount: 0.5) !important;
+}
+
 .small {
   font-size: 0.8rem;
 }
