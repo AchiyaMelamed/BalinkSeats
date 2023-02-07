@@ -17,6 +17,7 @@ export class UserService {
       id: user.id,
       name: user.employee.firstName + ' ' + user.employee.lastName,
       email: user.employee.email,
+      level: user.level,
     };
   }
 
@@ -27,6 +28,7 @@ export class UserService {
     const newUser = new this.userModel({
       employee,
       password: hashedPassword,
+      level: employee.level,
     });
     return newUser.save();
   }

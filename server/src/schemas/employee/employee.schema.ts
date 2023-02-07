@@ -13,6 +13,8 @@ export class Employee {
   email: string;
   @Prop({ required: false })
   phone: string;
+  @Prop({ required: true, default: 'Employee' })
+  level: 'Admin' | 'Employee';
 }
 
 export const EmployeeSchema = SchemaFactory.createForClass(Employee);

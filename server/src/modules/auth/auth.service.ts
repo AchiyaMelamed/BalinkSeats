@@ -82,6 +82,7 @@ export class AuthService {
         token: string;
         name: string;
         email: string;
+        level: 'Admin' | 'Employee' | undefined;
       }
     | { ERROR: string }
   > {
@@ -95,6 +96,7 @@ export class AuthService {
       token: jwt,
       email,
       name: user.name,
+      level: user?.level,
     };
   }
 }
