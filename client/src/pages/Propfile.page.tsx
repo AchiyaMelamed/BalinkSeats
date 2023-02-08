@@ -228,9 +228,29 @@ const ProfilePage = () => {
   );
 
   return (
-    <div style={{ display: "flex", gap: "10%", justifyContent: "center" }}>
-      {futureScheduledElement}
-      {pastScheduledElement}
+    <div>
+      <DialogTitle
+        sx={{
+          padding: "0.5rem 0 0 0",
+          textAlign: "center",
+          fontSize: "1.7rem",
+          color: signedUser.level === "Admin" ? "orange !important" : "",
+        }}
+      >
+        {signedUser?.name}
+        {signedUser.level === "Admin" ? " (Admin)" : ""}
+      </DialogTitle>
+      <SmallLabelComponent
+        labelStyle={{ padding: 0, color: "#A61F69 !important" }}
+        divStyle={{ marginTop: 0 }}
+      >
+        {signedUser?.email}
+      </SmallLabelComponent>
+
+      <div style={{ display: "flex", gap: "10%", justifyContent: "center" }}>
+        {futureScheduledElement}
+        {pastScheduledElement}
+      </div>
     </div>
   );
 };
