@@ -1,13 +1,12 @@
 import DialogTitle from "@mui/material/DialogTitle";
 import moment from "moment";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import SmallLabelComponent from "../components/SmallLabel/SmallLabel.component";
 import {
   useDeleteScheduleMutation,
   useGetScheduledQuery,
 } from "../features/api/apiDataSlice";
 import DeleteScheduleComponent from "../features/data/components/DeleteSchedule/DeleteSchedule.component";
-import PermissionComponent from "../features/Permissions/components/Permission.component";
 import { useAppSelector } from "../store/features/store";
 
 const ProfilePage = () => {
@@ -20,6 +19,22 @@ const ProfilePage = () => {
   const [pastScheduledForEmployee, setPastScheduledForEmployee] = useState(
     []
   ) as any;
+
+  useEffect(() => {
+    if (
+      resultsDeleteSchedule?.status === "rejected" ||
+      resultsDeleteSchedule?.data?.ERROR
+    ) {
+      alert(
+        `Error deleting schedule: ${
+          resultsDeleteSchedule?.data?.ERROR
+            ? resultsDeleteSchedule?.data?.ERROR
+            : JSON.parse(JSON.stringify(resultsDeleteSchedule?.error))?.data
+                ?.message
+        }`
+      );
+    }
+  }, [resultsDeleteSchedule]);
 
   useEffect(() => {
     setFutureScheduledForEmployee([]);
