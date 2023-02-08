@@ -52,6 +52,8 @@ const SeatComponent = ({ seatData }: any) => {
   const onSubmit = useCallback(
     (e: any) => {
       e.preventDefault();
+      if (!isSigned)
+        return setErrorLabel({ label: "❌ Can't Schedule, Please sign in" });
       schedule({
         seat: seatData.seat._id,
         employeeEmail: scheduleFor.email || signedUser.email,
@@ -59,7 +61,7 @@ const SeatComponent = ({ seatData }: any) => {
         endDate,
       });
     },
-    [schedule, seatData, signedUser, startDate, endDate, scheduleFor]
+    [schedule, seatData, signedUser, startDate, endDate, scheduleFor, isSigned]
   );
 
   let errorComponent = useMemo(() => {

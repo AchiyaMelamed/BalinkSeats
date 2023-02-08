@@ -19,7 +19,8 @@ export const apiDataSlice = createApi({
       }),
     }),
     scheduleSeat: builder.mutation({
-      invalidatesTags: ["Scheduled"],
+      invalidatesTags: (result, error, arg) =>
+        result.ERROR || error ? [] : ["Scheduled"],
       query: (data: any) => ({
         url: "/scheduled",
         method: "POST",
@@ -27,7 +28,8 @@ export const apiDataSlice = createApi({
       }),
     }),
     deleteSchedule: builder.mutation({
-      invalidatesTags: ["Scheduled"],
+      invalidatesTags: (result, error, arg) =>
+        result.ERROR || error ? [] : ["Scheduled"],
       query: (id: string) => ({
         url: `/scheduled/${id}`,
         method: "DELETE",

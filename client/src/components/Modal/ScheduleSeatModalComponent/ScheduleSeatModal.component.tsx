@@ -88,7 +88,7 @@ const ScheduleSeatModalComponent = ({
           marginBottom: "0.5rem",
         }}
       >
-        All Scheduled:
+        Seat Schedules:
       </DialogTitle>
     ),
     []
@@ -164,7 +164,7 @@ const ScheduleSeatModalComponent = ({
         )}
       </>
     ),
-    [filteredSeatSchedules, allScheduledTitle]
+    [filteredSeatSchedules, allScheduledTitle, handleDeleteSchedule]
   );
 
   const { data: allEmployees } = useGetAllEmployeesQuery("employees");

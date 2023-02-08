@@ -30,6 +30,7 @@ const FormWrapper = ({
         sx={{
           padding: "1rem 2rem",
           overflowY: "auto",
+          alignItems: "center",
           ...gridStyle,
         }}
       >
