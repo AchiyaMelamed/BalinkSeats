@@ -20,6 +20,8 @@ const Tabs = ({ children }: any) => {
       <ol className="tab-list">
         {children?.map((child: any) => {
           const { label } = child.props;
+          const officeNumber =
+            child.props.children.props.children.props.officeData.office.number;
 
           return (
             <li
@@ -27,6 +29,7 @@ const Tabs = ({ children }: any) => {
               className={
                 activeTab === label ? "tab-list-item active" : "tab-list-item"
               }
+              title={officeNumber}
               onClick={() => onClickTabItem(label)}
             >
               {label}

@@ -122,7 +122,8 @@ const ScheduleSeatModalComponent = ({
                     borderRadius: "0.5rem",
                     padding: "1rem",
                     marginBottom: "0.5rem",
-                    boxShadow: " rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                    boxShadow:
+                      "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
                   }}
                   key={schedule.id}
                 >

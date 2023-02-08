@@ -11,6 +11,7 @@ import HeaderComponent from "./components/Header/Header.component";
 import FooterComponent from "./components/Footer/Footer.component";
 import { useAppDispatch, useAppSelector } from "./store/features/store";
 import { logoutUser } from "./store/features/signedUserSlice";
+import PropfilePage from "./pages/Propfile.page";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -33,7 +34,7 @@ function App() {
     {
       path: "/profile",
       name: "Profile",
-      element: <div>Profile</div>,
+      element: <PropfilePage />,
       display: isSigned,
     },
   ];

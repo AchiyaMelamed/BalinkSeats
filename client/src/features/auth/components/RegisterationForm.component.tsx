@@ -166,7 +166,10 @@ const RegistrationFormComponent: FC = () => {
 
   return (
     <div>
-      <FormWrapper titleLabel={titleLabel}>
+      <FormWrapper
+        titleLabel={titleLabel}
+        gridStyle={{ flexWrap: "unset", maxHeight: "62vh" }}
+      >
         {apiErrorLabel && apiErrorComponent}
         <FormComponent
           fields={fields}

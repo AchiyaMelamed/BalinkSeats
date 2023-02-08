@@ -15,8 +15,9 @@ const FormWrapper = ({
       sx={{
         border: 1,
         // borderColor: "#A57CE1",
-        marginTop: 5,
-        width: "20rem",
+        marginTop: "3vh",
+        width: "20vw",
+        minWidth: "350px",
         borderRadius: 1,
         padding: "1rem",
         ...boxStyle,
@@ -28,6 +29,7 @@ const FormWrapper = ({
         justifyContent="flex-start"
         sx={{
           padding: "1rem 2rem",
+          overflowY: "auto",
           ...gridStyle,
         }}
       >

@@ -10,7 +10,11 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
       justifyContent="flex-start"
       alignItems="center"
     >
-      <img src={BALINK_LOGO_NO_BG} alt="balink-logo" width="200em" />
+      <img
+        src={BALINK_LOGO_NO_BG}
+        alt="balink-logo"
+        style={{ maxHeight: "10vh" }}
+      />
       <main>{children}</main>
     </Grid>
   );

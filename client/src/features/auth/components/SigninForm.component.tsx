@@ -89,7 +89,10 @@ const SigninFormComponent: FC = () => {
   // const forgotPasswordLink = "/forgot-password";
 
   return (
-    <FormWrapper titleLabel={titleLabel}>
+    <FormWrapper
+      titleLabel={titleLabel}
+      gridStyle={{ flexWrap: "unset", maxHeight: "62vh" }}
+    >
       {apiErrorLabel && apiErrorComponent}
       <FormComponent
         fields={fields}

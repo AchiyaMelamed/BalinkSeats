@@ -18,7 +18,10 @@ import { useAppSelector } from "../../store/features/store";
 
 function ResponsiveAppBar({ pages, actions }: any) {
   const navigate = useNavigate();
-  const [signedUser] = useAppSelector((state) => [state.signed.signedUser]);
+  const [signedUser, isSigned] = useAppSelector((state) => [
+    state.signed.signedUser,
+    state.signed.isSigned,
+  ]);
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -44,7 +47,7 @@ function ResponsiveAppBar({ pages, actions }: any) {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
+    if (isSigned) setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
@@ -56,6 +59,7 @@ function ResponsiveAppBar({ pages, actions }: any) {
   };
 
   const handlePageClick = (page: typeOfPage) => {
+    handleCloseNavMenu();
     navigate(page.path);
   };
 
@@ -112,7 +116,7 @@ function ResponsiveAppBar({ pages, actions }: any) {
               }}
             >
               {displayPages.map((page: typeOfPage) => (
-                <MenuItem key={page.path} onClick={handleCloseNavMenu}>
+                <MenuItem key={page.path} onClick={() => handlePageClick(page)}>
                   <Typography textAlign="center" color="#a57ce1">
                     {page.name}
                   </Typography>
