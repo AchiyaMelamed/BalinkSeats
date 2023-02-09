@@ -123,7 +123,7 @@ export class ScheduledSeatService {
     return resWithEmployee;
   }
 
-  async findScheduledById(id: string) {
+  async findScheduledById(id: string): Promise<{ ERROR: string | any } | any> {
     try {
       const res = await this.scheduledSeatModel.findById(id);
       if (!res) {
@@ -213,7 +213,9 @@ export class ScheduledSeatService {
     }
   }
 
-  async deleteScheduledById(id: string) {
+  async deleteScheduledById(
+    id: string,
+  ): Promise<{ ERROR: string | any } | any> {
     try {
       const scheduled = await this.scheduledSeatModel.findByIdAndDelete(id);
       if (!scheduled) {
@@ -225,12 +227,14 @@ export class ScheduledSeatService {
     }
   }
 
-  async isSeatScheduled(seat, startDate, endDate) {
+  async isSeatScheduled(seat, startDate, endDate, exceptScheduleId = '') {
     const seatScheduled = await this.findBySeat({ seatId: seat._id });
     if (seatScheduled.ERROR) {
       return seatScheduled;
     }
     return seatScheduled.some((scheduled) => {
+      if (exceptScheduleId && scheduled.id == exceptScheduleId) return false;
+
       const scheduledStartDate = new Date(scheduled.startDate).setHours(
         0,
         0,
@@ -270,5 +274,99 @@ export class ScheduledSeatService {
       id: seatId,
     });
     return { seat: { number: seat.number, id: seatId } };
+  }
+
+  async updateScheduledById(
+    id: string,
+    updateScheduledSeatDto: CreateScheduledSeatDto,
+  ) {
+    try {
+      const startDate = new Date(updateScheduledSeatDto.startDate).setHours(
+        0,
+        0,
+        0,
+        0,
+      );
+      const endDate = new Date(updateScheduledSeatDto.endDate).setHours(
+        0,
+        0,
+        0,
+        0,
+      );
+      const today = new Date().setHours(0, 0, 0, 0);
+      if (endDate < startDate) {
+        return {
+          ERROR: 'End date cannot be before start date',
+        };
+      }
+
+      if (startDate < today) {
+        return {
+          ERROR: 'Start date cannot be in the past',
+        };
+      }
+
+      const seat = await this.seatService.findSeat(
+        Object.assign({
+          id: updateScheduledSeatDto.seat,
+          number: updateScheduledSeatDto.seatNumber,
+        }),
+      );
+      if (seat.ERROR) {
+        return seat;
+      }
+
+      const isScheduled = await this.isSeatScheduled(
+        seat,
+        startDate,
+        endDate,
+        id,
+      );
+      if (isScheduled) {
+        return {
+          ERROR: 'Seat is already scheduled for this time',
+        };
+      }
+
+      const employee = await this.employeeService.findEmployee(
+        Object.assign({
+          id: updateScheduledSeatDto.employee,
+          email: updateScheduledSeatDto.employeeEmail,
+        }),
+      );
+      if (employee.ERROR) {
+        return employee;
+      }
+
+      const isEmployeeHasSeat = await this.isEmployeeHasSeat(
+        employee,
+        startDate,
+        endDate,
+      );
+      if (
+        isEmployeeHasSeat &&
+        isEmployeeHasSeat.seat.number === updateScheduledSeatDto.seatNumber
+      ) {
+        return {
+          ERROR: `Employee already has a seat for this time (${isEmployeeHasSeat.seat.number})`,
+        };
+      }
+      const scheduled = await this.scheduledSeatModel.findByIdAndUpdate(
+        id,
+        {
+          seat,
+          employee,
+          startDate,
+          endDate,
+        },
+        { new: true },
+      );
+      if (!scheduled) {
+        throw new Error('Error while updating schedule');
+      }
+      return scheduled;
+    } catch (error) {
+      return await handleInvalidValueError(error);
+    }
   }
 }

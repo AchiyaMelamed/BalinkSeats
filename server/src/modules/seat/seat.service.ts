@@ -35,7 +35,7 @@ export class SeatService {
         ? await this.findByRow({ rowId: row, rowNumber })
         : this.findAllSeats();
       if (!res) {
-        return { message: 'No seat found' };
+        return { ERROR: 'No seat found' };
       }
       return res;
     } catch (error) {

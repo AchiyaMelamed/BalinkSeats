@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Body,
+  Put,
   Query,
   Param,
   Delete,
@@ -62,5 +63,16 @@ export class ScheduledSeatController {
   @Delete(':id')
   async deleteScheduledById(@Param('id') id: string) {
     return this.scheduledSeatService.deleteScheduledById(id);
+  }
+
+  @Put(':id')
+  async updateScheduledById(
+    @Param('id') id: string,
+    @Body() updateScheduledSeatDto: CreateScheduledSeatDto,
+  ) {
+    return this.scheduledSeatService.updateScheduledById(
+      id,
+      updateScheduledSeatDto,
+    );
   }
 }
