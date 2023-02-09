@@ -10,6 +10,7 @@ const FormComponent = ({
   errorComponent,
   showError,
   requestStatus,
+  marginField,
   bottomLineBeforeStyle,
   bottomLineAfterStyle,
   bottomLineHoverStyle,
@@ -41,6 +42,7 @@ const FormComponent = ({
             placeHolder={field.placeHolder}
             value={field.value}
             inputLabelStyle={inputLabelStyle}
+            marginField={marginField}
             onChange={field.onChange}
             width={field.width}
             required={field.required}
@@ -60,7 +62,15 @@ const FormComponent = ({
   );
 
   return (
-    <form onSubmit={onSubmitHandler}>
+    <form
+      onSubmit={onSubmitHandler}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {renderedFields}
       {showError && errorComponent}
       <Button
@@ -70,7 +80,6 @@ const FormComponent = ({
           color: requestStatus === "pending" ? "#9073c0" : "#e6e6e6",
           width: "100%",
           minHeight: "2.40625rem",
-          alignSelf: "center",
           border: "1px solid",
           borderColor: requestStatus === "pending" ? "#9073c0" : "#e6e6e6",
           ":hover": {

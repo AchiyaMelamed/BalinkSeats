@@ -2,7 +2,8 @@ import "./ScheduleSeatModal.scss";
 
 import DialogTitle from "@mui/material/DialogTitle";
 import moment from "moment";
-import { useCallback, useEffect, useMemo } from "react";
+import { AiOutlineEdit } from "react-icons/ai";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import FormComponent from "../../Form";
 import SmallLabelComponent from "../../SmallLabel/SmallLabel.component";
 import ModalComponent from "../Modal.component";
@@ -11,11 +12,16 @@ import { OptionUnstyled } from "@mui/base";
 import {
   useDeleteScheduleMutation,
   useGetAllEmployeesQuery,
+  useUpdateScheduleMutation,
 } from "../../../features/api/apiDataSlice";
 import { useAppDispatch, useAppSelector } from "../../../store/features/store";
-import { setScheduleFor } from "../../../store/features/dataSlice";
+import {
+  setAllEmployees,
+  setScheduleFor,
+} from "../../../store/features/dataSlice";
 import PermissionComponent from "../../../features/Permissions/components/Permission.component";
 import DeleteScheduleComponent from "../../../features/data/components/DeleteSchedule/DeleteSchedule.component";
+import EditScheduleComponent from "../../../features/data/components/EditSchedule/EditSchedule.component";
 
 const ScheduleSeatModalComponent = ({
   showModal,
@@ -31,8 +37,10 @@ const ScheduleSeatModalComponent = ({
   successComponent,
   formFields,
 }: any) => {
+  const [editMode, setEditMode] = useState("");
   const dispatch = useAppDispatch();
   const [deleteSchedule, resultsDeleteSchedule] = useDeleteScheduleMutation();
+  const [editSchedule, resultsEditSchedule] = useUpdateScheduleMutation();
 
   const filteredSeatSchedules = useMemo(() => {
     if (seatSchedules && seatSchedules.length > 0) {
@@ -61,6 +69,43 @@ const ScheduleSeatModalComponent = ({
     [deleteSchedule]
   );
 
+  const handleEditClick = useCallback(
+    (id: string) => {
+      if (editMode === "") setEditMode(id);
+      else setEditMode("");
+    },
+    [editMode]
+  );
+
+  const onCloseEdit = useCallback(() => {
+    setEditMode("");
+  }, []);
+
+  const handleSubmitEdit = useCallback(
+    ({ id, newSchedule }: any) => {
+      editSchedule({ id, schedule: newSchedule });
+    },
+    [editSchedule]
+  );
+
+  useEffect(() => {
+    if (
+      resultsEditSchedule?.status === "rejected" ||
+      resultsEditSchedule?.data?.ERROR
+    ) {
+      alert(
+        `Error editing schedule: ${
+          resultsEditSchedule?.data?.ERROR
+            ? resultsEditSchedule?.data?.ERROR
+            : JSON.parse(JSON.stringify(resultsEditSchedule?.error))?.data
+                ?.message
+        }`
+      );
+    } else if (resultsEditSchedule?.status === "fulfilled") {
+      setEditMode("");
+    }
+  }, [resultsEditSchedule]);
+
   useEffect(() => {
     if (
       resultsDeleteSchedule?.status === "rejected" ||
@@ -88,7 +133,7 @@ const ScheduleSeatModalComponent = ({
           marginBottom: "0.5rem",
         }}
       >
-        Seat Schedules:
+        Seat Schedules
       </DialogTitle>
     ),
     []
@@ -98,7 +143,7 @@ const ScheduleSeatModalComponent = ({
     () => (
       <>
         {allScheduledTitle}
-        {filteredSeatSchedules ? (
+        {filteredSeatSchedules && filteredSeatSchedules?.length > 0 ? (
           filteredSeatSchedules.map(
             (schedule: {
               id: string;
@@ -116,43 +161,77 @@ const ScheduleSeatModalComponent = ({
                 <div
                   style={{
                     display: "flex",
-                    gap: "0.5rem",
-                    justifyContent: "center",
+                    flexDirection: "column",
                     alignItems: "center",
-                    borderRadius: "0.5rem",
-                    padding: "1rem",
-                    marginBottom: "0.5rem",
-                    boxShadow:
-                      "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
+                    marginBottom: editMode === schedule.id ? "0.5rem" : "0",
                   }}
-                  key={schedule.id}
                 >
-                  <DialogTitle
-                    sx={{
-                      padding: "0",
-                      color: "#301E67 !important",
-                      fontWeight: "600",
-                      fontSize: "1rem",
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "0.5rem",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: "0.5rem",
+                      padding: "1rem",
+                      marginBottom: editMode === schedule.id ? "0" : "0.5rem",
+                      boxShadow:
+                        "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
                     }}
+                    key={schedule.id}
                   >
-                    {moment(schedule.startDate).format("DD-MM-YYYY")} -
-                    {moment(schedule.endDate).format("DD-MM-YYYY")}
-                  </DialogTitle>
-                  <SmallLabelComponent
-                    labelStyle={{ padding: 0, color: "#A61F69 !important" }}
-                    divStyle={{ marginTop: 0 }}
-                  >
-                    {schedule.employee.firstName} {schedule.employee.lastName}
-                  </SmallLabelComponent>
-                  <PermissionComponent
-                    levelPermitted={"Admin"}
-                    emailPermitted={schedule.employee.email}
-                  >
-                    <DeleteScheduleComponent
+                    <DialogTitle
+                      sx={{
+                        padding: "0",
+                        color: "#301E67 !important",
+                        fontWeight: "600",
+                        fontSize: "1rem",
+                      }}
+                    >
+                      {moment(schedule.startDate).format("DD-MM-YYYY")} -
+                      {moment(schedule.endDate).format("DD-MM-YYYY")}
+                    </DialogTitle>
+                    <SmallLabelComponent
+                      labelStyle={{ padding: 0, color: "#A61F69 !important" }}
+                      divStyle={{ marginTop: 0 }}
+                    >
+                      {schedule.employee.firstName} {schedule.employee.lastName}
+                    </SmallLabelComponent>
+                    <PermissionComponent
+                      levelPermitted={"Admin"}
+                      emailPermitted={schedule.employee.email}
+                    >
+                      <DeleteScheduleComponent
+                        schedule={schedule}
+                        onClick={() => handleDeleteSchedule(schedule)}
+                      />
+                      <div
+                        style={{
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          backgroundColor: "#cd5888",
+                          borderRadius: "0.5rem",
+                        }}
+                        onClick={() => handleEditClick(schedule.id)}
+                      >
+                        <AiOutlineEdit />
+                      </div>
+                      {/* <EditScheduleComponent
+                        schedule={schedule}
+                        onClick={() => handleEditSchedule(schedule)}
+                      /> */}
+                    </PermissionComponent>
+                  </div>
+                  {editMode === schedule.id && (
+                    <EditScheduleComponent
+                      key={schedule.id}
                       schedule={schedule}
-                      onClick={() => handleDeleteSchedule(schedule)}
+                      onSubmit={handleSubmitEdit}
+                      onClose={onCloseEdit}
+                      results={resultsEditSchedule}
                     />
-                  </PermissionComponent>
+                  )}
                 </div>
               );
             }
@@ -164,10 +243,27 @@ const ScheduleSeatModalComponent = ({
         )}
       </>
     ),
-    [filteredSeatSchedules, allScheduledTitle, handleDeleteSchedule]
+    [
+      filteredSeatSchedules,
+      allScheduledTitle,
+      handleDeleteSchedule,
+      editMode,
+      handleEditClick,
+      handleSubmitEdit,
+      onCloseEdit,
+      resultsEditSchedule,
+    ]
   );
 
   const { data: allEmployees } = useGetAllEmployeesQuery("employees");
+
+  useEffect(() => {
+    if (allEmployees?.data?.ERROR) alert(allEmployees?.data?.ERROR);
+    if (allEmployees?.error)
+      alert(JSON.parse(JSON.stringify(allEmployees?.error))?.data?.message);
+    if (allEmployees && allEmployees?.length > 0)
+      dispatch(setAllEmployees(allEmployees));
+  }, [allEmployees, dispatch]);
 
   const scheduleSeatModal = allEmployees && (
     <ModalComponent

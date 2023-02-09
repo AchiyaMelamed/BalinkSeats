@@ -7,6 +7,7 @@ const FieldComponent = ({
   name,
   type,
   label,
+  marginField,
   inputLabelStyle,
   inputColor,
   placeHolder,
@@ -26,7 +27,10 @@ const FieldComponent = ({
   }, [name, width]);
 
   return (
-    <div className="field-wrapper" id={name}>
+    <div
+      style={{ margin: marginField || "1rem 0 2rem", width: "100%" }}
+      id={name}
+    >
       <InputLabel
         sx={{ fontWeight: 540, color: "unset", ...inputLabelStyle }}
         htmlFor={name}

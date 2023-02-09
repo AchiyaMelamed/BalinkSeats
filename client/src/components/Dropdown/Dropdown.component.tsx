@@ -8,10 +8,11 @@ const DropdownComponent = ({
   handleSelect,
   getOptionLabel,
   isOptionEqualToValue,
+  inputStyle,
 }: any) => {
   return (
     <Autocomplete
-      sx={{ width: "25vw" }}
+      sx={{ width: "25vw", ...inputStyle }}
       renderInput={(params) => (
         <TextField
           {...params}
