@@ -2,12 +2,19 @@ import { Injectable, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt/dist';
 
 import * as bcrypt from 'bcrypt';
+import * as sgMail from '@sendgrid/mail';
+
 import { LoginUserDto } from '../../dto';
 import { RegisterUserDto } from '../../dto';
 import { EmployeeService } from '../employee/employee.service';
 import { UserDetails } from '../user/user.interface';
+import { ConfigService } from '@nestjs/config';
 
 import { UserService } from '../user/user.service';
+
+sgMail.setApiKey(
+  '******',
+);
 
 @Injectable()
 export class AuthService {
@@ -15,6 +22,7 @@ export class AuthService {
     private readonly userService: UserService,
     @Inject(EmployeeService) private readonly employeeService: EmployeeService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async hashPassword(password: string): Promise<string> {
@@ -48,6 +56,18 @@ export class AuthService {
 
     const hashedPassword = await this.hashPassword(password);
     const newUser = await this.userService.createUser(employee, hashedPassword);
+    // Create token and send a link containing the token to the user's email
+    // when link clicked make the user verified in DB
+    const token = this.jwtService.sign({ user: newUser });
+    try {
+      await this.sendVerificationEmail({
+        email: newUser.employee.email,
+        token,
+      });
+    } catch (error) {
+      newUser.delete();
+      throw new Error(error);
+    }
     return this.userService._getUserDetails(newUser);
   }
 
@@ -77,6 +97,32 @@ export class AuthService {
     return this.userService._getUserDetails(user);
   }
 
+  async verifyUser(token: string): Promise<{ ERROR: string } | any> {
+    const { user } = await this.jwtService.verifyAsync(token);
+    if (!user) return { ERROR: 'Invalid token' };
+    user.isVerified = true;
+    const userDetails = await this.userService.updateUser(user._id, user);
+    if (userDetails?.ERROR) return { ERROR: userDetails.ERROR };
+    return { Success: 'User verified' };
+  }
+
+  async sendVerificationEmail({
+    email,
+    token,
+  }: {
+    email: string;
+    token: string;
+  }) {
+    const msg = {
+      to: 'achiyam@balink.net', // Change to your recipient
+      from: 'achiyam@balink.net', // Change to your verified sender
+      subject: 'BalinkSeats Verification Email',
+      text: `Please click the link below to verify your email address:\nhttp://localhost:3000/api/auth/verify/${token}`,
+      html: `<strong>Please click the link below to verify your email address:<br/>http://localhost:3000/api/auth/verify/${token}</strong>`,
+    };
+    return sgMail.send(msg);
+  }
+
   async loginUser(existingUser: LoginUserDto): Promise<
     | {
         token: string;
@@ -90,6 +136,7 @@ export class AuthService {
     const user = await this.validateUser(email, password);
 
     if (user?.ERROR) return { ERROR: user.ERROR };
+    // if (!user.isVerified) return { ERROR: 'User not verified' };
 
     const jwt = await this.jwtService.signAsync({ user });
     return {

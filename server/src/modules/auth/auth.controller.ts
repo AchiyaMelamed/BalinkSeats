@@ -1,5 +1,5 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { HttpCode } from '@nestjs/common/decorators';
+import { Controller, Post, Body, Get } from '@nestjs/common';
+import { HttpCode, Param, Res } from '@nestjs/common/decorators';
 import { HttpStatus } from '@nestjs/common/enums';
 import { ApiTags } from '@nestjs/swagger';
 import { LoginUserDto } from '../../dto';
@@ -28,5 +28,15 @@ export class AuthController {
     { token: string; name: string; email: string } | { ERROR: string }
   > {
     return this.authService.loginUser(user);
+  }
+
+  @Get('verify/:token')
+  async verifyUser(
+    @Res() res,
+    @Param('token') token: string,
+  ): Promise<void | { ERROR: string }> {
+    const result = await this.authService.verifyUser(token);
+    if (result?.ERROR) return { ERROR: result.ERROR };
+    res.redirect('http://localhost:4000/signin');
   }
 }

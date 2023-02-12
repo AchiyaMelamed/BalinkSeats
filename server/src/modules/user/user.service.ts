@@ -18,6 +18,7 @@ export class UserService {
       name: user.employee.firstName + ' ' + user.employee.lastName,
       email: user.employee.email,
       level: user.level,
+      isVerified: user.isVerified,
     };
   }
 
@@ -41,5 +42,14 @@ export class UserService {
 
   async findUserByEmployee(employee: Employee): Promise<UserDocument | null> {
     return this.userModel.findOne({ employee }).exec();
+  }
+
+  async updateUser(
+    id: string,
+    user: User,
+  ): Promise<UserDetails | { ERROR: string } | any> {
+    const updatedUser = await this.userModel.findByIdAndUpdate(id, user).exec();
+    if (!updatedUser) return { ERROR: 'User not found' };
+    return this._getUserDetails(updatedUser);
   }
 }
