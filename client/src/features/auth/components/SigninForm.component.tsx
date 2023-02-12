@@ -60,7 +60,11 @@ const SigninFormComponent: FC = () => {
   const apiErrorLabel: { label: string; link?: string; linkLabel?: string } =
     useMemo(
       () =>
-        results?.data?.ERROR
+        results?.data?.ERROR === "User not verified"
+          ? {
+              label: `❌ User not verified, Please verify your email address`,
+            }
+          : results?.data?.ERROR
           ? {
               label: `❌ Email or Password is incorrect`,
 

@@ -84,7 +84,7 @@ const RegistrationFormComponent: FC = () => {
   ];
   const titleLabel = "Register to BalinkSeats";
 
-  const submitButtonLabel = "Sign In";
+  const submitButtonLabel = "Register";
 
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -193,6 +193,7 @@ const RegistrationFormComponent: FC = () => {
         closeIcon="close"
         title="Registration Success"
       >
+        {/* Add text just says to confirm the email before sign in */}
         <LinkComponent to="/signin">Sign In</LinkComponent>
       </ModalComponent>
     </div>
