@@ -43,6 +43,13 @@ class CreateScheduledSeatDto {
     example: 'YYYY-MM-DD',
   })
   endDate: Date;
+
+  @ApiProperty({
+    description: 'The days of the week the seat is scheduled',
+    example: ['Monday', 'Tuesday'],
+    required: false,
+  })
+  repeatEvery: string[];
 }
 
 export default CreateScheduledSeatDto;

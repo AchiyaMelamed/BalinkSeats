@@ -55,9 +55,17 @@ export class ScheduledSeatController {
   async createScheduled(
     @Body() createScheduledSeatDto: CreateScheduledSeatDto,
   ) {
-    return await this.scheduledSeatService.createScheduled(
-      createScheduledSeatDto,
-    );
+    if (
+      !createScheduledSeatDto.repeatEvery ||
+      createScheduledSeatDto?.repeatEvery?.length === 0
+    )
+      return await this.scheduledSeatService.createScheduled(
+        createScheduledSeatDto,
+      );
+    else
+      return await this.scheduledSeatService.createRepeatScheduled(
+        createScheduledSeatDto,
+      );
   }
 
   @Delete(':id')
