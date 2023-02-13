@@ -4,6 +4,7 @@ export interface ScheduledState {
   id: string;
   startDate: string;
   endDate: string;
+  repeatEvery: string[];
   employee: {
     id: string;
     name: string;
@@ -19,6 +20,7 @@ const initialScheduledState: ScheduledState = {
   id: "",
   startDate: "",
   endDate: "",
+  repeatEvery: [],
   employee: {
     id: "",
     name: "",

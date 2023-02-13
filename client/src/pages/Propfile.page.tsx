@@ -6,6 +6,7 @@ import {
   useDeleteScheduleMutation,
   useGetScheduledQuery,
 } from "../features/api/apiDataSlice";
+import RepeatEveryComponent from "../features/data/components/RepeatEvery/RepeatEvery.component";
 import DeleteScheduleComponent from "../features/data/components/DeleteSchedule/DeleteSchedule.component";
 import { useAppSelector } from "../store/features/store";
 
@@ -161,6 +162,9 @@ const ProfilePage = () => {
                   >
                     Seat Number: {schedule.seat.number}
                   </SmallLabelComponent>
+                  {schedule.repeatEvery?.length > 0 && (
+                    <RepeatEveryComponent repeatEvery={schedule.repeatEvery} />
+                  )}
                 </div>
                 <DeleteScheduleComponent
                   schedule={schedule}
@@ -229,6 +233,9 @@ const ProfilePage = () => {
                 >
                   Seat Number: {schedule.seat.number}
                 </SmallLabelComponent>
+                {schedule.repeatEvery?.length > 0 && (
+                  <RepeatEveryComponent repeatEvery={schedule.repeatEvery} />
+                )}
               </div>
             );
           })
@@ -239,7 +246,7 @@ const ProfilePage = () => {
         )}
       </div>
     ),
-    [futureScheduledOfUserTitle, pastScheduledForEmployee, scheduled]
+    [pastScheduledForEmployee, scheduled, pastScheduledOfUserTitle]
   );
 
   return (

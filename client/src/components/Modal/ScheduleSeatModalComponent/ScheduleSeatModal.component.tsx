@@ -22,6 +22,7 @@ import {
 import PermissionComponent from "../../../features/Permissions/components/Permission.component";
 import DeleteScheduleComponent from "../../../features/data/components/DeleteSchedule/DeleteSchedule.component";
 import EditScheduleComponent from "../../../features/data/components/EditSchedule/EditSchedule.component";
+import RepeatEveryComponent from "../../../features/data/components/RepeatEvery/RepeatEvery.component";
 
 const ScheduleSeatModalComponent = ({
   showModal,
@@ -156,6 +157,7 @@ const ScheduleSeatModalComponent = ({
               seat: { id: string; number: string };
               startDate: string;
               endDate: string;
+              repeatEvery: string[];
             }) => {
               return (
                 <div
@@ -165,11 +167,12 @@ const ScheduleSeatModalComponent = ({
                     alignItems: "center",
                     marginBottom: editMode === schedule.id ? "0.5rem" : "0",
                   }}
+                  key={schedule.id}
                 >
                   <div
                     style={{
                       display: "flex",
-                      gap: "0.5rem",
+                      flexDirection: "column",
                       justifyContent: "center",
                       alignItems: "center",
                       borderRadius: "0.5rem",
@@ -178,50 +181,60 @@ const ScheduleSeatModalComponent = ({
                       boxShadow:
                         "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
                     }}
-                    key={schedule.id}
                   >
-                    <DialogTitle
-                      sx={{
-                        padding: "0",
-                        color: "#301E67 !important",
-                        fontWeight: "600",
-                        fontSize: "1rem",
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "0.5rem",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
                     >
-                      {moment(schedule.startDate).format("DD-MM-YYYY")} -
-                      {moment(schedule.endDate).format("DD-MM-YYYY")}
-                    </DialogTitle>
-                    <SmallLabelComponent
-                      labelStyle={{ padding: 0, color: "#A61F69 !important" }}
-                      divStyle={{ marginTop: 0 }}
-                    >
-                      {schedule.employee.firstName} {schedule.employee.lastName}
-                    </SmallLabelComponent>
-                    <PermissionComponent
-                      levelPermitted={"Admin"}
-                      emailPermitted={schedule.employee.email}
-                    >
-                      <DeleteScheduleComponent
-                        schedule={schedule}
-                        onClick={() => handleDeleteSchedule(schedule)}
-                      />
-                      <div
-                        style={{
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          backgroundColor: "#cd5888",
-                          borderRadius: "0.5rem",
+                      <DialogTitle
+                        sx={{
+                          padding: "0",
+                          color: "#301E67 !important",
+                          fontWeight: "600",
+                          fontSize: "1rem",
                         }}
-                        onClick={() => handleEditClick(schedule.id)}
                       >
-                        <AiOutlineEdit />
-                      </div>
-                      {/* <EditScheduleComponent
-                        schedule={schedule}
-                        onClick={() => handleEditSchedule(schedule)}
-                      /> */}
-                    </PermissionComponent>
+                        {moment(schedule.startDate).format("DD-MM-YYYY")} -
+                        {moment(schedule.endDate).format("DD-MM-YYYY")}
+                      </DialogTitle>
+                      <SmallLabelComponent
+                        labelStyle={{ padding: 0, color: "#A61F69 !important" }}
+                        divStyle={{ marginTop: 0 }}
+                      >
+                        {schedule.employee.firstName}{" "}
+                        {schedule.employee.lastName}
+                      </SmallLabelComponent>
+                      <PermissionComponent
+                        levelPermitted={"Admin"}
+                        emailPermitted={schedule.employee.email}
+                      >
+                        <DeleteScheduleComponent
+                          schedule={schedule}
+                          onClick={() => handleDeleteSchedule(schedule)}
+                        />
+                        <div
+                          style={{
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            backgroundColor: "#cd5888",
+                            borderRadius: "0.5rem",
+                          }}
+                          onClick={() => handleEditClick(schedule.id)}
+                        >
+                          <AiOutlineEdit />
+                        </div>
+                      </PermissionComponent>
+                    </div>
+                    {schedule?.repeatEvery?.length > 0 && (
+                      <RepeatEveryComponent
+                        repeatEvery={schedule.repeatEvery}
+                      />
+                    )}
                   </div>
                   {editMode === schedule.id && (
                     <EditScheduleComponent

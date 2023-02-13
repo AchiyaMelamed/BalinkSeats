@@ -64,7 +64,7 @@ function HomePage() {
   const sittingToday = dataScheduled?.filter((scheduled: any) => {
     return (
       scheduled.employee.email === signedUser?.email &&
-      isToday(scheduled.startDate, scheduled.endDate)
+      isToday(scheduled.startDate, scheduled.endDate, scheduled.repeatEvery)
     );
   })[0];
 

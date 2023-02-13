@@ -42,7 +42,7 @@ const EditScheduleComponent = ({
         employeeEmail: schedule.employee.email,
       })
     );
-  }, []);
+  }, [dispatch, schedule]);
 
   const {
     startDate: newStartDate,

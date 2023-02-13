@@ -17,6 +17,7 @@ const SeatComponent = ({ seatData }: any) => {
   const today = useMemo(() => moment().format("YYYY-MM-DD"), []);
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
+  const [repeatEvery, setRepeatEvery] = useState([] as string[]);
 
   const [signedUser, isSigned] = useAppSelector((state) => [
     state.signed.signedUser,
@@ -46,8 +47,31 @@ const SeatComponent = ({ seatData }: any) => {
         value: endDate,
         onChange: (e: any) => setEndDate(e.currentTarget.value),
       },
+      {
+        name: "repeatEvery",
+        label: "Repeat Every",
+        type: "select",
+        placeHolder: "Select",
+        value: repeatEvery,
+        options: [
+          { value: "Sunday", label: "Sunday" },
+          { value: "Monday", label: "Monday" },
+          { value: "Tuesday", label: "Tuesday" },
+          { value: "Wednesday", label: "Wednesday" },
+          { value: "Thursday", label: "Thursday" },
+          { value: "Friday", label: "Friday" },
+          { value: "Saturday", label: "Saturday" },
+        ],
+        onChange: (e: any) => {
+          let newRepeatEvery = [] as string[];
+          for (let i = 0; i < e.currentTarget.selectedOptions.length; i++) {
+            newRepeatEvery.push(e.currentTarget.selectedOptions[i].value);
+          }
+          setRepeatEvery(newRepeatEvery);
+        },
+      },
     ];
-  }, [startDate, endDate]);
+  }, [startDate, endDate, repeatEvery]);
 
   const onSubmit = useCallback(
     (e: any) => {
@@ -59,9 +83,19 @@ const SeatComponent = ({ seatData }: any) => {
         employeeEmail: scheduleFor.email || signedUser.email,
         startDate,
         endDate,
+        repeatEvery,
       });
     },
-    [schedule, seatData, signedUser, startDate, endDate, scheduleFor, isSigned]
+    [
+      schedule,
+      seatData,
+      signedUser,
+      startDate,
+      endDate,
+      scheduleFor,
+      isSigned,
+      repeatEvery,
+    ]
   );
 
   let errorComponent = useMemo(() => {
@@ -113,7 +147,11 @@ const SeatComponent = ({ seatData }: any) => {
   const sittingName = useMemo(() => {
     if (seatSchedules) {
       const found = seatSchedules?.find((schedule: any) => {
-        return isToday(schedule.startDate, schedule.endDate);
+        return isToday(
+          schedule.startDate,
+          schedule.endDate,
+          schedule.repeatEvery
+        );
       });
       if (found)
         return `${found?.employee?.firstName} ${found?.employee?.lastName}`;

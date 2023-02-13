@@ -29,6 +29,7 @@ const FormComponent = ({
           type: string;
           label: string;
           placeHolder: string;
+          options: string[];
           value: string;
           onChange: (e: any) => void;
           width: string;
@@ -41,6 +42,7 @@ const FormComponent = ({
             label={field.label}
             placeHolder={field.placeHolder}
             value={field.value}
+            options={field.options}
             inputLabelStyle={inputLabelStyle}
             marginField={marginField}
             onChange={field.onChange}
