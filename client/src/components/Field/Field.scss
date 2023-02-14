@@ -1,12 +1,20 @@
-.select-input {
-  width: 50%;
-  align-self: center;
-  border-radius: 0.5rem;
-  min-height: 9rem;
+.select-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: max-content;
 }
 
-.option-input {
+// .select-input {
+//   width: 50%;
+//   display: flex;
+// }
+
+.label-input {
   color: #9073c0 !important;
   font-size: 1rem;
   text-align: center;
+}
+
+.checkbox-input {
+  accent-color: #96e5d1;
 }

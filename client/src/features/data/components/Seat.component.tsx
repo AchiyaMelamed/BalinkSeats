@@ -63,10 +63,12 @@ const SeatComponent = ({ seatData }: any) => {
           { value: "Saturday", label: "Saturday" },
         ],
         onChange: (e: any) => {
-          let newRepeatEvery = [] as string[];
-          for (let i = 0; i < e.currentTarget.selectedOptions.length; i++) {
-            newRepeatEvery.push(e.currentTarget.selectedOptions[i].value);
-          }
+          let newRepeatEvery = [...repeatEvery] as string[];
+          if (newRepeatEvery.includes(e.currentTarget.value))
+            newRepeatEvery = newRepeatEvery.filter(
+              (day) => day !== e.currentTarget.value
+            );
+          else newRepeatEvery.push(e.currentTarget.value);
           setRepeatEvery(newRepeatEvery);
         },
       },

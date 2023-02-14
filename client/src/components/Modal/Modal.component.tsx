@@ -38,6 +38,7 @@ const ModalComponent = ({
       <div
         style={{
           display: "flex",
+          flexWrap: "wrap",
           gap: "1rem",
           width: "100%",
           justifyContent: "center",
@@ -51,7 +52,8 @@ const ModalComponent = ({
             justifyContent: "center",
             display: "flex",
             flexDirection: "column",
-            width: secondModal ? "50%" : "100%",
+            width: secondModal ? "45%" : "100%",
+            padding: "0.1rem",
           }}
         >
           <DialogTitle

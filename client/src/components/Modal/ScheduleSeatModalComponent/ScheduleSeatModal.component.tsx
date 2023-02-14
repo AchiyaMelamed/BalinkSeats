@@ -173,6 +173,7 @@ const ScheduleSeatModalComponent = ({
                     style={{
                       display: "flex",
                       flexDirection: "column",
+                      width: "95%",
                       justifyContent: "center",
                       alignItems: "center",
                       borderRadius: "0.5rem",
@@ -185,6 +186,7 @@ const ScheduleSeatModalComponent = ({
                     <div
                       style={{
                         display: "flex",
+                        flexWrap: "wrap",
                         gap: "0.5rem",
                         justifyContent: "center",
                         alignItems: "center",
@@ -196,10 +198,12 @@ const ScheduleSeatModalComponent = ({
                           color: "#301E67 !important",
                           fontWeight: "600",
                           fontSize: "1rem",
+                          flex: "0 1 auto",
+                          textAlign: "center",
                         }}
                       >
-                        {moment(schedule.startDate).format("DD-MM-YYYY")} -
-                        {moment(schedule.endDate).format("DD-MM-YYYY")}
+                        {moment(schedule.startDate).format("DD/MM/YYYY")} -
+                        {moment(schedule.endDate).format("DD/MM/YYYY")}
                       </DialogTitle>
                       <SmallLabelComponent
                         labelStyle={{ padding: 0, color: "#A61F69 !important" }}
@@ -280,7 +284,7 @@ const ScheduleSeatModalComponent = ({
 
   const scheduleSeatModal = allEmployees && (
     <ModalComponent
-      modalStyle={{ width: "100%", maxWidth: "60vw", padding: "0.5rem" }}
+      modalStyle={{ maxWidth: "90vw", padding: "0.5rem" }}
       open={showModal}
       title={`Schedule Seat for`}
       titleStyle={{ textAlign: "center", padding: "0.5rem 0 0 0" }}
@@ -329,7 +333,11 @@ const ScheduleSeatModalComponent = ({
       {successLabel?.label !== "" && successComponent}
       {errorLabel?.label !== "" && errorComponent}
       <SmallLabelComponent
-        labelStyle={{ padding: 0, color: "#96E5D1 !important" }}
+        labelStyle={{
+          padding: 0,
+          color: "#96E5D1 !important",
+          fontWeight: 600,
+        }}
         divStyle={{ marginTop: 0 }}
       >
         Seat number {seatData.seat.number}

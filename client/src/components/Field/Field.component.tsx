@@ -30,29 +30,46 @@ const FieldComponent = ({
   const selectInput = useMemo(() => {
     if (type === "select") {
       return (
-        <select
-          multiple={true}
-          name={name}
-          value={value}
-          onChange={onChange}
-          required={required}
-          className="select-input"
-        >
-          {options?.map((option: any) => (
-            <option
-              key={option.value}
-              value={option.value}
-              className="option-input"
-            >
-              {option.label}
-            </option>
+        <div className="select-wrapper">
+          {options.map((option: any) => (
+            <div className="select-input" key={option.value}>
+              <input
+                type="checkbox"
+                name={name}
+                value={option.value}
+                onChange={onChange}
+                required={required}
+                className="checkbox-input"
+              />
+              <label htmlFor={name} className="label-input">
+                {option.label}
+              </label>
+            </div>
           ))}
-        </select>
+        </div>
       );
+      // <select
+      //   multiple={true}
+      //   name={name}
+      //   value={value}
+      //   onChange={onChange}
+      //   required={required}
+      //   className="select-input"
+      // >
+      //   {options?.map((option: any) => (
+      //     <option
+      //       key={option.value}
+      //       value={option.value}
+      //       className="option-input"
+      //     >
+      //       {option.label}
+      //     </option>
+      //   ))}
+      // </select>
     } else {
       return null;
     }
-  }, [name, type, value, onChange, required, options]);
+  }, [name, type, onChange, required, options]);
 
   return (
     <div
@@ -68,7 +85,6 @@ const FieldComponent = ({
         sx={{
           fontWeight: 540,
           color: "unset",
-          textAlign: type === "select" ? "center" : "",
           ...inputLabelStyle,
         }}
         htmlFor={name}

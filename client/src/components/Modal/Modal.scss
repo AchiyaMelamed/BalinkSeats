@@ -1,8 +1,12 @@
 .second-modal-wrapper {
   display: flex;
   flex-direction: column;
-  width: 50%;
+  align-items: center;
+  width: 47%;
   border-left: 0.1rem solid #e5e5e5;
   margin-bottom: 1rem;
   padding-left: 1rem;
+  @media all and (max-width: 768px) {
+    border-left: unset;
+  }
 }
