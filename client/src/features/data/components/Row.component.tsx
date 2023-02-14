@@ -32,6 +32,7 @@ const RowComponent = ({ rowData }: any) => {
         minWidth: `${
           rowData.row.orientation === "horizontal" ? "100%" : "auto"
         }`,
+        maxWidth: "unset",
         margin: "0",
         padding: "0",
         borderRadius: "2rem",

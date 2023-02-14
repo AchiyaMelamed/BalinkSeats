@@ -29,6 +29,7 @@ const AreaComponent = ({ areaData }: any) => {
       }`}
       boxStyle={{
         minWidth: "calc(50% - 1rem)",
+        maxWidth: "unset",
         height: "fit-content",
         width: "100%",
         margin: "0",

@@ -30,6 +30,7 @@ const OfficeComponent = ({ officeData }: any) => {
       boxStyle={{
         width: "95%",
         maxHeight: "80%",
+        maxWidth: 'unset',
         overflow: "auto",
         padding: "0",
         borderWidth: "0.2rem",

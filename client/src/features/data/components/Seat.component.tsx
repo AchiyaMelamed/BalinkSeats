@@ -9,6 +9,7 @@ import { useScheduleSeatMutation } from "../../api/apiDataSlice";
 import SmallLabelComponent from "../../../components/SmallLabel/SmallLabel.component";
 import ScheduleSeatModalComponent from "../../../components/Modal/ScheduleSeatModalComponent/ScheduleSeatModal.component";
 import isToday from "../../../utils/datesCalculates/isToday";
+import { setScheduleFor } from "../../../store/features/dataSlice";
 
 const SeatComponent = ({ seatData }: any) => {
   const [successLabel, setSuccessLabel] = useState({ label: "" });
@@ -78,6 +79,8 @@ const SeatComponent = ({ seatData }: any) => {
   const onSubmit = useCallback(
     (e: any) => {
       e.preventDefault();
+      if (scheduleFor.email === "")
+        setScheduleFor({ email: signedUser.email, name: signedUser.name });
       if (!isSigned)
         return setErrorLabel({ label: "❌ Can't Schedule, Please sign in" });
       schedule({

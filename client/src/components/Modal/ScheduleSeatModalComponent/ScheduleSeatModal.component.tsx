@@ -284,7 +284,7 @@ const ScheduleSeatModalComponent = ({
 
   const scheduleSeatModal = allEmployees && (
     <ModalComponent
-      modalStyle={{ maxWidth: "90vw", padding: "0.5rem" }}
+      modalStyle={{ maxWidth: "90vw", padding: "1rem" }}
       open={showModal}
       title={`Schedule Seat for`}
       titleStyle={{ textAlign: "center", padding: "0.5rem 0 0 0" }}
@@ -319,6 +319,13 @@ const ScheduleSeatModalComponent = ({
                 setScheduleFor({
                   name: `${newValue.firstName} ${newValue.lastName}`,
                   email: newValue.email,
+                })
+              );
+            else
+              dispatch(
+                setScheduleFor({
+                  name: signedUser.name,
+                  email: signedUser.email,
                 })
               );
           }}
