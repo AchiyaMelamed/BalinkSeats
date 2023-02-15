@@ -12,10 +12,6 @@ import { ConfigService } from '@nestjs/config';
 
 import { UserService } from '../user/user.service';
 
-sgMail.setApiKey(
-  '******',
-);
-
 @Injectable()
 export class AuthService {
   constructor(
@@ -113,6 +109,7 @@ export class AuthService {
     email: string;
     token: string;
   }) {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const msg = {
       to: 'achiyam@balink.net', // Change to your recipient
       from: 'achiyam@balink.net', // Change to your verified sender
@@ -136,7 +133,7 @@ export class AuthService {
     const user = await this.validateUser(email, password);
 
     if (user?.ERROR) return { ERROR: user.ERROR };
-    // if (!user.isVerified) return { ERROR: 'User not verified' };
+    if (!user.isVerified) return { ERROR: 'User not verified' };
 
     const jwt = await this.jwtService.signAsync({ user });
     return {
