@@ -12,10 +12,8 @@ import SmallLabelComponent from "../components/SmallLabel/SmallLabel.component";
 import { useAppDispatch, useAppSelector } from "../store/features/store";
 import { setScheduled } from "../store/features/dataSlice";
 import isToday from "../utils/datesCalculates/isToday";
-import { logoutUser } from "../store/features/signedUserSlice";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
-import ModalComponent from "../components/Modal/Modal.component";
 import SittingTodayComponent from "../features/data/components/SittingToday/SittingToday.component";
 import PermissionComponent from "../features/Permissions/components/Permission.component";
 
@@ -23,7 +21,7 @@ function HomePage() {
   const [showSittingToday, setShowSittingToday] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { isLoading, data, error, isError } = useGetDataQuery("data");
+  const { isLoading, data, isError } = useGetDataQuery("data");
   const { data: dataScheduled } = useGetScheduledQuery("scheduled");
   const [signedUser, isSigned] = useAppSelector((state) => [
     state.signed.signedUser,

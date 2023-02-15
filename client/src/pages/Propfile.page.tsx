@@ -9,9 +9,14 @@ import {
 import RepeatEveryComponent from "../features/data/components/RepeatEvery/RepeatEvery.component";
 import DeleteScheduleComponent from "../features/data/components/DeleteSchedule/DeleteSchedule.component";
 import { useAppSelector } from "../store/features/store";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
-  const [signedUser] = useAppSelector((state) => [state.signed.signedUser]);
+  const navigate = useNavigate();
+  const [signedUser, isSigned] = useAppSelector((state) => [
+    state.signed.signedUser,
+    state.signed.isSigned,
+  ]);
   const { data: scheduled } = useGetScheduledQuery("scheduled");
   const [deleteSchedule, resultsDeleteSchedule] = useDeleteScheduleMutation();
   const [futureScheduledForEmployee, setFutureScheduledForEmployee] = useState(
@@ -20,6 +25,12 @@ const ProfilePage = () => {
   const [pastScheduledForEmployee, setPastScheduledForEmployee] = useState(
     []
   ) as any;
+
+  useEffect(() => {
+    if (!isSigned) {
+      navigate("/signin");
+    }
+  }, [isSigned, navigate]);
 
   useEffect(() => {
     if (
