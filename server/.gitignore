@@ -36,6 +36,7 @@ lerna-debug.log*
 
 # ENV
 .sendgrid.env
+.env
 
 # Data
 /scripts

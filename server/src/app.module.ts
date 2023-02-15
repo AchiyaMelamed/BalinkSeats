@@ -14,7 +14,7 @@ import { AuthModule } from './modules/auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.sendgrid.env',
+      envFilePath: ['.sendgrid.env', '.env'],
       isGlobal: true,
     }),
     SeatModule,

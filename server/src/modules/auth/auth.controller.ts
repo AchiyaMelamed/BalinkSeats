@@ -37,6 +37,10 @@ export class AuthController {
   ): Promise<void | { ERROR: string }> {
     const result = await this.authService.verifyUser(token);
     if (result?.ERROR) return { ERROR: result.ERROR };
-    res.redirect('http://localhost:4000/signin');
+    res.redirect(
+      process.env.CLIENT_HOST
+        ? process.env.CLIENT_HOST + '/signin'
+        : 'http://localhost:4000/signin',
+    );
   }
 }

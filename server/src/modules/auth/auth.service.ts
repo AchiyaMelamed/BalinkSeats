@@ -114,8 +114,16 @@ export class AuthService {
       to: 'achiyam@balink.net', // Change to your recipient
       from: 'achiyam@balink.net', // Change to your verified sender
       subject: 'BalinkSeats Verification Email',
-      text: `Please click the link below to verify your email address:\nhttp://localhost:3000/api/auth/verify/${token}`,
-      html: `<strong>Please click the link below to verify your email address:<br/>http://localhost:3000/api/auth/verify/${token}</strong>`,
+      text:
+        `Please click the link below to verify your email address:\n` +
+        process.env.BASE_URL
+          ? process.env.BASE_URL + `/api/auth/verify/${token}`
+          : 'http://localhost:3000/api/auth/verify/${token}',
+      html:
+        `<strong>Please click the link below to verify your email address:<br/>` +
+        process.env.BASE_URL
+          ? process.env.BASE_URL + `/api/auth/verify/${token}`
+          : 'http://localhost:3000/api/auth/verify/${token}' + `</strong>`,
     };
     return sgMail.send(msg);
   }
