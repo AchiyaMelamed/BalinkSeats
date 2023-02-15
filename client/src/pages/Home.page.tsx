@@ -31,6 +31,12 @@ function HomePage() {
   ]);
 
   useEffect(() => {
+    if (!isSigned) {
+      navigate("/signin");
+    }
+  }, [isSigned, navigate]);
+
+  useEffect(() => {
     if (dataScheduled) {
       dispatch(setScheduled(dataScheduled));
     }
