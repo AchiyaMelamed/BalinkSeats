@@ -8,13 +8,12 @@ import FormComponent from "../../Form";
 import SmallLabelComponent from "../../SmallLabel/SmallLabel.component";
 import ModalComponent from "../Modal.component";
 import DropdownComponent from "../../Dropdown/Dropdown.component";
-import { OptionUnstyled } from "@mui/base";
 import {
   useDeleteScheduleMutation,
   useGetAllEmployeesQuery,
   useUpdateScheduleMutation,
 } from "../../../features/api/apiDataSlice";
-import { useAppDispatch, useAppSelector } from "../../../store/features/store";
+import { useAppDispatch } from "../../../store/features/store";
 import {
   setAllEmployees,
   setScheduleFor,

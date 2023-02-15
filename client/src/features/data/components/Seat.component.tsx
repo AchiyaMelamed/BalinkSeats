@@ -83,6 +83,12 @@ const SeatComponent = ({ seatData }: any) => {
         setScheduleFor({ email: signedUser.email, name: signedUser.name });
       if (!isSigned)
         return setErrorLabel({ label: "❌ Can't Schedule, Please sign in" });
+      if (repeatEvery?.length > 0) {
+        const sortedRepeatEvery = repeatEvery.sort((a: string, b: string) => {
+          return moment(a, "dddd").day() - moment(b, "dddd").day();
+        });
+        setRepeatEvery(sortedRepeatEvery);
+      }
       schedule({
         seat: seatData.seat._id,
         employeeEmail: scheduleFor.email || signedUser.email,
