@@ -1,8 +1,11 @@
 import { useMemo } from "react";
 import { useAppSelector } from "../../../store/features/store";
 
+import SmallLabelComponent from "../../../components/SmallLabel/SmallLabel.component";
+
 const PermissionComponent = ({
   showError,
+  errorLabel,
   showInstead,
   levelPermitted,
   emailPermitted,
@@ -14,7 +17,11 @@ const PermissionComponent = ({
   ]);
 
   const isPermitted = useMemo(() => {
-    if (levelPermitted) {
+    if (levelPermitted && typeof levelPermitted === "object") {
+      if (isSigned && levelPermitted.includes(signedUser?.level)) {
+        return true;
+      }
+    } else if (levelPermitted && typeof levelPermitted === "string") {
       if (isSigned && signedUser?.level === levelPermitted) {
         return true;
       } else if (emailPermitted) {
@@ -35,7 +42,9 @@ const PermissionComponent = ({
     <div>{showInstead}</div>
   ) : showError ? (
     <div className="no-permission">
-      <h1>You don't have permissions for it.</h1>
+      <SmallLabelComponent errorText>
+        {errorLabel || "You don't have permissions for it."}
+      </SmallLabelComponent>
     </div>
   ) : null;
 };

@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import ModalComponent from "../components/Modal/Modal.component";
 import SittingTodayComponent from "../features/data/components/SittingToday/SittingToday.component";
+import PermissionComponent from "../features/Permissions/components/Permission.component";
 
 function HomePage() {
   const [showSittingToday, setShowSittingToday] = useState(false);
@@ -68,41 +69,49 @@ function HomePage() {
     );
   })[0];
 
-  return isLoading ? (
-    <div className="loading">
-      <LoadingComponent />
-    </div>
-  ) : isError ? (
-    errorComponent
-  ) : (
-    data && (
-      <div className="main">
-        {
-          <Button
-            sx={{
-              color: "#88ffeb80 !important",
-              padding: 0,
-              border: "#88ffeb80 1px solid",
-            }}
-            onClick={() => setShowSittingToday(!showSittingToday)}
-          >
-            Where am I sitting Today?
-          </Button>
-        }
-        {showSittingToday && (
-          <SittingTodayComponent data={data} sittingToday={sittingToday} />
-        )}
-        <Tabs>
-          {renderedOffices?.map((office: any, index: number) => {
-            return (
-              <Tab label={data[index].office.description} key={index}>
-                {office}
-              </Tab>
-            );
-          })}
-        </Tabs>
-      </div>
-    )
+  return (
+    <PermissionComponent
+      levelPermitted={["Employee", "Admin"]}
+      showError
+      errorLabel="You need to Sign In to see this page."
+    >
+      {isLoading ? (
+        <div className="loading">
+          <LoadingComponent />
+        </div>
+      ) : isError ? (
+        errorComponent
+      ) : (
+        data && (
+          <div className="main">
+            {
+              <Button
+                sx={{
+                  color: "#88ffeb80 !important",
+                  padding: 0,
+                  border: "#88ffeb80 1px solid",
+                }}
+                onClick={() => setShowSittingToday(!showSittingToday)}
+              >
+                Where am I sitting Today?
+              </Button>
+            }
+            {showSittingToday && (
+              <SittingTodayComponent data={data} sittingToday={sittingToday} />
+            )}
+            <Tabs>
+              {renderedOffices?.map((office: any, index: number) => {
+                return (
+                  <Tab label={data[index].office.description} key={index}>
+                    {office}
+                  </Tab>
+                );
+              })}
+            </Tabs>
+          </div>
+        )
+      )}
+    </PermissionComponent>
   );
 }
 
