@@ -7,6 +7,7 @@ import { LoginUserDto } from '../../dto';
 import { RegisterUserDto } from '../../dto';
 import { UserDetails } from '../user/user.interface';
 import { AuthService } from './auth.service';
+import { CLIENT_HOST } from '../../constants';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -38,9 +39,7 @@ export class AuthController {
     const result = await this.authService.verifyUser(token);
     if (result?.ERROR) return { ERROR: result.ERROR };
     res.redirect(
-      process.env.CLIENT_HOST
-        ? process.env.CLIENT_HOST + '/signin'
-        : 'http://localhost:4000/signin',
+      CLIENT_HOST ? CLIENT_HOST + '/signin' : 'http://localhost:4000/signin',
     );
   }
 }

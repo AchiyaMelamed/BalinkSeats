@@ -7,10 +7,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Seat, SeatSchema } from '../../schemas';
 import { Row, RowSchema } from '../../schemas';
 import { RowModule } from '../row/row.module';
+import { DATABASE_URL } from '../../constants';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/seats'),
+    MongooseModule.forRoot(DATABASE_URL || 'mongodb://127.0.0.1:27017/seats'),
     MongooseModule.forFeature([
       { name: Seat.name, schema: SeatSchema },
       { name: Row.name, schema: RowSchema },

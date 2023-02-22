@@ -9,6 +9,7 @@ import { RegisterUserDto } from '../../dto';
 import { EmployeeService } from '../employee/employee.service';
 import { UserDetails } from '../user/user.interface';
 import { ConfigService } from '@nestjs/config';
+import { BASE_URL, SENDGRID_API_KEY } from '../../constants';
 
 import { UserService } from '../user/user.service';
 
@@ -109,20 +110,19 @@ export class AuthService {
     email: string;
     token: string;
   }) {
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    sgMail.setApiKey(SENDGRID_API_KEY);
     const msg = {
       to: 'achiyam@balink.net', // Change to your recipient
       from: 'achiyam@balink.net', // Change to your verified sender
       subject: 'BalinkSeats Verification Email',
       text:
-        `Please click the link below to verify your email address:\n` +
-        process.env.BASE_URL
-          ? process.env.BASE_URL + `/api/auth/verify/${token}`
+        `Please click the link below to verify your email address:\n` + BASE_URL
+          ? BASE_URL + `/api/auth/verify/${token}`
           : 'http://localhost:3000/api/auth/verify/${token}',
       html:
         `<strong>Please click the link below to verify your email address:<br/>` +
-        process.env.BASE_URL
-          ? process.env.BASE_URL + `/api/auth/verify/${token}`
+        BASE_URL
+          ? BASE_URL + `/api/auth/verify/${token}`
           : 'http://localhost:3000/api/auth/verify/${token}' + `</strong>`,
     };
     return sgMail.send(msg);
